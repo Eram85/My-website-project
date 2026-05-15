@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BashaLagbe – Bangladesh's #1 Real Estate Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root{
+  --navy:#0a1628;--navy2:#112240;--navy3:#0d2137;
+  --green:#1a8a5a;--green2:#22c97a;--gpale:#e8f8f1;
+  --gold:#c9a84c;--red:#ef4444;--amber:#f59e0b;
+  --off:#f7f8fa;--g100:#f0f2f5;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g600:#64748b;--g800:#1e293b;
+  --ss:0 2px 8px rgba(10,22,40,.08);
+  --sm:0 8px 24px rgba(10,22,40,.13);
+  --sl:0 20px 60px rgba(10,22,40,.18);
+  --rsm:8px;--rmd:14px;--rlg:20px;--rxl:28px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--navy);overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--g100)}::-webkit-scrollbar-thumb{background:var(--green);border-radius:3px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes countUp{from{opacity:0}to{opacity:1}}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;animation:fadeIn .3s ease}
+.page.active{display:block}
+
+/* ── NAVBAR ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(255,255,255,.96);backdrop-filter:blur(24px);border-bottom:1px solid rgba(26,138,90,.1);box-shadow:0 2px 20px rgba(10,22,40,.05)}
+.brand{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;cursor:pointer}
+.brand span{color:var(--green)}
+.ndot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+.nav-links{display:flex;gap:26px;list-style:none}
+.nav-links a{font-size:14px;font-weight:500;color:var(--g600);cursor:pointer;transition:color .2s;position:relative;padding:4px 0}
+.nav-links a:hover,.nav-links a.active{color:var(--green)}
+.nav-links a.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--green);border-radius:2px}
+.nav-act{display:flex;align-items:center;gap:10px}
+.nav-user-chip{display:flex;align-items:center;gap:8px;background:var(--gpale);border:1px solid rgba(26,138,90,.2);border-radius:100px;padding:5px 14px 5px 8px;cursor:pointer;font-size:14px;font-weight:500;color:var(--navy)}
+.uav{width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+
+/* ── BUTTONS ── */
+.btn{padding:10px 22px;border-radius:var(--rsm);font-size:14px;font-weight:500;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none}
+.bp{background:var(--green);color:#fff;box-shadow:0 4px 14px rgba(26,138,90,.28)}.bp:hover{background:#158048;transform:translateY(-1px)}
+.bo{background:transparent;border:1.5px solid var(--g200);color:var(--navy)}.bo:hover{border-color:var(--green);color:var(--green)}
+.bn{background:var(--navy);color:#fff}.bn:hover{background:var(--navy2)}
+.bw{background:#25D366;color:#fff}.bw:hover{background:#1fb256}
+.bg{background:var(--gold);color:#fff}
+.br{background:#fee2e2;color:#991b1b}
+.bsm{padding:7px 14px;font-size:13px}
+.blg{padding:14px 32px;font-size:15px;font-weight:600}
+.bbl{width:100%;justify-content:center;margin-bottom:10px}
+
+/* ── BADGE ── */
+.badge{padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;display:inline-block}
+.bgreen{background:var(--green);color:#fff}.bgold{background:var(--gold);color:#fff}
+.bnavy{background:var(--navy);color:#fff}.bsuccess{background:#dcfce7;color:#166534}
+.bwarn{background:#fef3c7;color:#92400e}.bred{background:#fee2e2;color:#991b1b}
+
+/* ── SKELETON ── */
+.skel{background:linear-gradient(90deg,var(--g100) 25%,var(--g200) 50%,var(--g100) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--rsm)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;padding:100px 40px 60px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 45%,var(--navy2) 70%,#0a2818 100%)}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(80px)}
+.o1{width:600px;height:600px;background:var(--green);top:-100px;left:-100px;opacity:.14}
+.o2{width:400px;height:400px;background:var(--gold);top:60%;right:-60px;opacity:.05}
+.o3{width:350px;height:350px;background:var(--green);bottom:-80px;left:42%;opacity:.09}
+.hgrid{position:absolute;inset:0;opacity:.032;background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);background-size:64px 64px}
+.hero-inner{position:relative;z-index:1;text-align:center;max-width:880px;width:100%}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(26,138,90,.18);border:1px solid rgba(26,138,90,.3);border-radius:100px;padding:6px 18px;font-size:13px;color:var(--green2);margin-bottom:26px;animation:fadeUp .6s ease}
+.hbdot{width:6px;height:6px;background:var(--green2);border-radius:50%;animation:pulse 2s infinite}
+h1.htitle{font-family:'Playfair Display',serif;font-size:clamp(38px,5.5vw,70px);color:#fff;line-height:1.1;margin-bottom:18px;animation:fadeUp .6s ease .1s both}
+h1.htitle em{color:var(--green2);font-style:normal}
+.hsub{font-size:18px;color:rgba(255,255,255,.6);max-width:560px;margin:0 auto 40px;line-height:1.7;animation:fadeUp .6s ease .2s both}
+
+/* ── SEARCH ── */
+.sw{background:rgba(255,255,255,.98);border-radius:var(--rxl);padding:8px;box-shadow:var(--sl);display:flex;align-items:center;flex-wrap:wrap;gap:4px;max-width:800px;width:100%;animation:fadeUp .6s ease .3s both}
+.stabs{display:flex;gap:2px;padding:2px;background:var(--g100);border-radius:var(--rmd)}
+.stab{padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;border:none;background:none;color:var(--g600);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.stab.active{background:#fff;color:var(--navy);box-shadow:var(--ss)}
+.sdiv{width:1px;height:34px;background:var(--g200);flex-shrink:0}
+.sf{flex:1;min-width:110px;padding:4px 12px;display:flex;flex-direction:column}
+.sf label{font-size:10px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px}
+.sf select,.sf input{border:none;outline:none;font-size:14px;font-weight:500;color:var(--navy);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif}
+.sbtn{background:var(--green);color:#fff;border:none;border-radius:var(--rmd);padding:14px 22px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;flex-shrink:0;font-family:'DM Sans',sans-serif}
+.sbtn:hover{background:#158048;transform:scale(1.02)}
+.hstats{display:flex;gap:44px;margin-top:44px;animation:fadeUp .6s ease .4s both;flex-wrap:wrap;justify-content:center}
+.hn{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:#fff}
+.hn em{color:var(--green2);font-style:normal}
+.hl{font-size:12px;color:rgba(255,255,255,.44);margin-top:2px}
+
+/* ── SECTIONS ── */
+.sec{padding:80px 40px;max-width:1240px;margin:0 auto}
+.swrap{background:#fff}.soffw{background:var(--off)}
+.slbl{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:10px}
+.slbl::before{content:'';width:20px;height:2px;background:var(--green);border-radius:2px}
+h2.stl{font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,42px);color:var(--navy);line-height:1.2}
+.ssub{font-size:16px;color:var(--g600);margin-top:8px;line-height:1.6}
+.shdr{margin-bottom:44px}
+.shdr-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;flex-wrap:wrap;gap:16px}
+
+/* ── CARDS ── */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:24px}
+.pcard{background:#fff;border-radius:var(--rlg);overflow:hidden;border:1px solid var(--g200);box-shadow:var(--ss);cursor:pointer;transition:all .3s}
+.pcard:hover{transform:translateY(-6px);box-shadow:var(--sl);border-color:var(--green2)}
+.ci{position:relative;height:222px;overflow:hidden;background:var(--navy3);display:flex;align-items:center;justify-content:center}
+.ci img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;z-index:1}
+.ci-em{font-size:70px;opacity:.2;position:relative;z-index:0}
+.ci-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 35%,rgba(10,22,40,.72));z-index:2}
+.ci-bads{position:absolute;top:12px;left:12px;display:flex;gap:6px;z-index:3}
+.cfav{position:absolute;top:12px;right:12px;z-index:3;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.88);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;transition:all .2s;backdrop-filter:blur(8px)}
+.cfav:hover{background:#fff;transform:scale(1.12)}
+.cprice{position:absolute;bottom:12px;left:14px;z-index:3}
+.cpv{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff}
+.cps{font-size:12px;color:rgba(255,255,255,.65);margin-top:1px}
+.cbody{padding:16px 18px 18px}
+.ctitle{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:5px;line-height:1.3}
+.cloc{font-size:13px;color:var(--g600);display:flex;align-items:center;gap:4px;margin-bottom:12px}
+.cmeta{display:flex;gap:14px;padding-top:11px;border-top:1px solid var(--g100)}
+.cmi{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--g600)}
+.cagt{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--g100)}
+.av{width:32px;height:32px;border-radius:50%;background:var(--gpale);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--green);flex-shrink:0}
+.avlg{width:56px;height:56px;font-size:20px}
+.avxl{width:72px;height:72px;font-size:28px}
+
+/* ── LOCATION GRID ── */
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:16px}
+.lcard{background:#fff;border-radius:var(--rmd);padding:22px 18px;text-align:center;border:1px solid var(--g200);cursor:pointer;transition:all .25s;box-shadow:var(--ss)}
+.lcard:hover{border-color:var(--green);transform:translateY(-4px);box-shadow:var(--sm)}
+
+/* ── FILTER BAR ── */
+.fbar{background:#fff;border-radius:var(--rlg);padding:20px 24px;box-shadow:var(--ss);border:1px solid var(--g200);margin-bottom:28px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end}
+.fg{display:flex;flex-direction:column;gap:5px;min-width:130px}
+.fg label{font-size:11px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.5px}
+.fg select,.fg input{border:1.5px solid var(--g200);border-radius:var(--rsm);padding:8px 12px;font-size:14px;color:var(--navy);background:#fff;outline:none;cursor:pointer;transition:border-color .2s;font-family:'DM Sans',sans-serif}
+.fg select:focus,.fg input:focus{border-color:var(--green)}
+.srtrow{display:flex;gap:3px;background:var(--g100);border-radius:var(--rsm);padding:3px}
+.srtbtn{padding:7px 13px;border-radius:7px;font-size:12px;font-weight:500;border:none;background:none;color:var(--g600);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.srtbtn.active{background:#fff;color:var(--navy);box-shadow:var(--ss)}
+
+/* ── DETAIL ── */
+.dhero{height:420px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--navy) 0%,#1a3a5c 100%);display:flex;align-items:center;justify-content:center;margin-top:68px;background-size:cover;background-position:center}
+.dov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,22,40,.3),rgba(10,22,40,.85))}
+.dinfo{position:absolute;bottom:32px;left:40px;z-index:2}
+.dprice{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:#fff;line-height:1}
+.dloc{font-size:16px;color:rgba(255,255,255,.7);margin-top:6px}
+.dlay{max-width:1240px;margin:0 auto;padding:32px 40px;display:grid;grid-template-columns:1fr 360px;gap:32px}
+.dsec{background:#fff;border-radius:var(--rmd);padding:24px;border:1px solid var(--g200);box-shadow:var(--ss);margin-bottom:20px}
+.dsec h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);margin-bottom:16px}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.si{background:var(--g100);border-radius:var(--rsm);padding:16px;text-align:center}
+.sv{font-size:22px;font-weight:700;color:var(--navy)}
+.sl2{font-size:12px;color:var(--g600);margin-top:3px}
+.agrid{display:flex;flex-wrap:wrap;gap:8px}
+.achip{padding:6px 14px;border-radius:100px;border:1px solid var(--g200);background:var(--g100);font-size:13px;color:var(--g600)}
+.ngrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ni{display:flex;align-items:center;gap:10px;background:var(--g100);border-radius:var(--rsm);padding:12px}
+.galgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px}
+.gthumb{border-radius:var(--rsm);overflow:hidden;aspect-ratio:4/3;background:var(--navy3);display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;transition:opacity .2s;background-size:cover;background-position:center;opacity:.85}
+.gthumb:hover{opacity:1}
+.gthumb.main{grid-column:1/3;aspect-ratio:16/9;font-size:56px}
+
+/* ── CONTACT CARD ── */
+.ccard{background:#fff;border-radius:var(--rlg);padding:24px;border:1px solid var(--g200);box-shadow:var(--ss);position:sticky;top:88px}
+.ccard h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--navy);margin-bottom:16px}
+.emibox{margin-top:18px;padding-top:18px;border-top:1px solid var(--g200)}
+.emires{background:var(--gpale);border-radius:var(--rsm);padding:14px;text-align:center;margin-top:10px;border:1px solid rgba(26,138,90,.2)}
+.emiamt{font-size:24px;font-weight:700;color:var(--green);font-family:'Playfair Display',serif}
+.isml{border:1.5px solid var(--g200);border-radius:var(--rsm);padding:8px 10px;font-size:13px;width:100%;outline:none;transition:border-color .2s;font-family:'DM Sans',sans-serif}
+.isml:focus{border-color:var(--green)}
+
+/* ── DASHBOARD ── */
+.dlout{display:flex;min-height:calc(100vh - 68px);margin-top:68px}
+.dside{width:245px;background:var(--navy);padding:20px 14px;flex-shrink:0;display:flex;flex-direction:column}
+.duser{text-align:center;padding:16px 0 22px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:14px}
+.dun{font-size:15px;font-weight:600;color:#fff;margin-top:10px}
+.dur{font-size:12px;color:rgba(255,255,255,.4);margin-top:2px}
+.dbd{display:inline-block;background:rgba(26,138,90,.2);border:1px solid rgba(26,138,90,.4);border-radius:100px;padding:3px 10px;font-size:11px;color:var(--green2);margin-top:6px}
+.dnav{display:flex;flex-direction:column;gap:2px;flex:1}
+.dni{padding:10px 14px;border-radius:var(--rsm);font-size:14px;font-weight:500;color:rgba(255,255,255,.55);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.dni:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.dni.active{background:rgba(26,138,90,.2);color:var(--green2)}
+.dnic{font-size:17px;flex-shrink:0}
+.dsep{border-top:1px solid rgba(255,255,255,.07);margin:10px 0}
+.dcont{flex:1;padding:32px;background:var(--off);overflow-y:auto}
+.dhdr{margin-bottom:26px}
+.dhdr h2{font-family:'Playfair Display',serif;font-size:28px;color:var(--navy)}
+.dhdr p{font-size:14px;color:var(--g600);margin-top:3px}
+
+/* ── STAT CARDS ── */
+.srow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.scard{background:#fff;border-radius:var(--rmd);padding:20px;border:1px solid var(--g200);box-shadow:var(--ss)}
+.sic{font-size:26px;margin-bottom:10px}
+.sval{font-size:28px;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif}
+.slb{font-size:13px;color:var(--g600);margin-top:3px}
+.schg{font-size:12px;color:var(--green);font-weight:600;margin-top:6px}
+
+/* ── TABLES ── */
+.tcard{background:#fff;border-radius:var(--rmd);overflow:hidden;border:1px solid var(--g200);box-shadow:var(--ss);margin-bottom:20px}
+.thdr{padding:16px 20px;border-bottom:1px solid var(--g200);display:flex;justify-content:space-between;align-items:center}
+.thdr h3{font-size:16px;font-weight:600;color:var(--navy)}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--g100);padding:11px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.5px}
+tbody td{padding:13px 16px;border-bottom:1px solid var(--g100);font-size:14px;color:var(--g600)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--g100)}
+.ts{padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600}
+
+/* ── FORMS ── */
+.uform{background:#fff;border-radius:var(--rlg);padding:32px;border:1px solid var(--g200);box-shadow:var(--ss)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.fgp{display:flex;flex-direction:column;gap:6px}
+.fgp.s2{grid-column:1/-1}
+.flbl{font-size:13px;font-weight:600;color:var(--navy)}
+.fin,.fsel,.ftxt{border:1.5px solid var(--g200);border-radius:var(--rsm);padding:10px 14px;font-size:14px;color:var(--navy);background:#fff;outline:none;transition:border-color .2s;width:100%;font-family:'DM Sans',sans-serif}
+.fin:focus,.fsel:focus,.ftxt:focus{border-color:var(--green)}
+.ftxt{resize:vertical;min-height:110px}
+.iup{border:2px dashed var(--g300);border-radius:var(--rmd);padding:44px;text-align:center;cursor:pointer;transition:all .2s;background:var(--g100)}
+.iup:hover{border-color:var(--green);background:var(--gpale)}
+
+/* ── AUTH ── */
+.awrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+.aleft{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);display:flex;align-items:center;justify-content:center;padding:60px;position:relative;overflow:hidden}
+.alin{position:relative;max-width:440px}
+.aleft h2{font-family:'Playfair Display',serif;font-size:40px;color:#fff;line-height:1.2;margin-bottom:14px}
+.aleft p{font-size:16px;color:rgba(255,255,255,.55);line-height:1.7}
+.aperk{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.7);font-size:14px;margin-top:16px}
+.apic{color:var(--green2);font-size:18px}
+.aright{display:flex;align-items:center;justify-content:center;padding:60px;background:#fff}
+.aform{width:100%;max-width:400px}
+.aform h3{font-family:'Playfair Display',serif;font-size:30px;color:var(--navy);margin-bottom:6px}
+.asub{font-size:14px;color:var(--g600);margin-bottom:28px}
+.dor{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.dor span{font-size:13px;color:var(--g600)}
+.dor::before,.dor::after{content:'';flex:1;height:1px;background:var(--g200)}
+.igp{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.igp label{font-size:13px;font-weight:600;color:var(--navy)}
+.igp input,.igp select{border:1.5px solid var(--g200);border-radius:var(--rsm);padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;width:100%;background:#fff}
+.igp input:focus,.igp select:focus{border-color:var(--green)}
+.aft{font-size:13px;color:var(--g600);text-align:center;margin-top:16px}
+.aft a{color:var(--green);cursor:pointer;font-weight:500}
+
+/* ── TESTIMONIALS ── */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.tc2{background:#fff;border-radius:var(--rlg);padding:24px;border:1px solid var(--g200);box-shadow:var(--ss);transition:all .2s}
+.tc2:hover{box-shadow:var(--sm);transform:translateY(-3px)}
+.stars{color:var(--gold);font-size:16px;margin-bottom:12px;letter-spacing:2px}
+.ttxt{font-size:15px;color:var(--g600);line-height:1.75;margin-bottom:16px;font-style:italic}
+
+/* ── NEWSLETTER ── */
+.nlsec{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);padding:80px 40px;text-align:center}
+.nlsec h2{font-family:'Playfair Display',serif;font-size:38px;color:#fff;margin-bottom:10px}
+.nlsec p{font-size:16px;color:rgba(255,255,255,.55);margin-bottom:32px}
+.nlf{display:flex;gap:12px;max-width:500px;margin:0 auto}
+.nli{flex:1;padding:13px 18px;border:1px solid rgba(255,255,255,.18);border-radius:var(--rsm);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:rgba(255,255,255,.1);color:#fff}
+.nli::placeholder{color:rgba(255,255,255,.35)}
+
+/* ── FOOTER ── */
+footer{background:var(--g800);color:rgba(255,255,255,.65);padding:60px 40px 32px}
+.fgf{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.fbrand{font-family:'Playfair Display',serif;font-size:22px;color:#fff;margin-bottom:12px}
+.fbrand span{color:var(--green2)}
+.fdesc{font-size:14px;line-height:1.75;color:rgba(255,255,255,.4)}
+.fcon{margin-top:18px;font-size:13px;color:rgba(255,255,255,.33);line-height:1.9}
+.fcol h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.33);margin-bottom:14px}
+.fcol a{display:block;font-size:14px;color:rgba(255,255,255,.54);margin-bottom:8px;cursor:pointer;transition:color .2s}
+.fcol a:hover{color:var(--green2)}
+.fbot{max-width:1240px;margin:0 auto;padding-top:28px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;font-size:13px;flex-wrap:wrap;gap:10px}
+
+/* ── MAP ── */
+.mapb{background:linear-gradient(135deg,#e8f4f8 0%,#ddf0ea 100%);border-radius:var(--rmd);height:260px;border:1px solid var(--g200);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.mpin{position:absolute;font-size:28px;animation:float 3s ease-in-out infinite}
+.mctr{text-align:center;position:relative;z-index:1}
+
+/* ── AI CHAT ── */
+.aiwrap{background:var(--navy2);border-radius:var(--rxl);padding:36px;border:1px solid rgba(26,138,90,.15)}
+.aichat{max-height:280px;overflow-y:auto;margin-bottom:16px;display:flex;flex-direction:column;gap:12px}
+.aimsg{padding:12px 16px;border-radius:var(--rmd);max-width:82%;font-size:14px;line-height:1.6}
+.aimsg.bot{background:rgba(26,138,90,.14);border:1px solid rgba(26,138,90,.2);color:rgba(255,255,255,.85);align-self:flex-start}
+.aimsg.usr{background:var(--green);color:#fff;align-self:flex-end}
+.aiinr{display:flex;gap:10px}
+.aiin{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--rsm);padding:10px 14px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;outline:none}
+.aiin:focus{border-color:rgba(26,138,90,.4)}
+.aiqs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.aiq{padding:5px 13px;border-radius:100px;font-size:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.aiq:hover{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8)}
+.tdots{display:flex;align-items:center;gap:5px;padding:4px 0}
+.td{width:6px;height:6px;border-radius:50%;background:var(--green2);animation:pulse 1.2s infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+
+/* ── ABOUT ── */
+.ahero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);padding:120px 40px 80px;text-align:center}
+.ahero h1{font-family:'Playfair Display',serif;font-size:52px;color:#fff;margin-bottom:14px}
+.ahero p{font-size:18px;color:rgba(255,255,255,.55);max-width:580px;margin:0 auto}
+.tgrid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:22px}
+.tc3{background:#fff;border-radius:var(--rlg);padding:24px;text-align:center;border:1px solid var(--g200);box-shadow:var(--ss);transition:all .2s}
+.tc3:hover{transform:translateY(-4px);box-shadow:var(--sm)}
+.tav{width:80px;height:80px;border-radius:50%;background:var(--gpale);border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:var(--green);margin:0 auto 14px}
+
+/* ── PAGE HEADER ── */
+.phdr{background:#fff;border-bottom:1px solid var(--g200);padding:22px 40px;margin-top:68px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.phdr h1{font-family:'Playfair Display',serif;font-size:26px;color:var(--navy)}
+
+/* ── BLOG ── */
+.blogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:24px}
+.bcard{background:#fff;border-radius:var(--rlg);overflow:hidden;border:1px solid var(--g200);box-shadow:var(--ss);cursor:pointer;transition:all .3s}
+.bcard:hover{transform:translateY(-5px);box-shadow:var(--sl)}
+.bimg{height:180px;display:flex;align-items:center;justify-content:center;font-size:56px;background:linear-gradient(135deg,var(--navy) 0%,#1a3a5c 100%)}
+.bbody{padding:20px}
+.bcat{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:8px}
+.btitle{font-size:17px;font-weight:600;color:var(--navy);line-height:1.4;margin-bottom:10px}
+.bexc{font-size:14px;color:var(--g600);line-height:1.65;margin-bottom:14px}
+.bmeta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--g400)}
+
+/* ── FAQ ── */
+.faqitem{background:#fff;border-radius:var(--rmd);border:1px solid var(--g200);margin-bottom:10px;overflow:hidden;box-shadow:var(--ss)}
+.faqq{padding:18px 22px;font-size:15px;font-weight:600;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .2s}
+.faqq:hover{background:var(--g100)}
+.faqq.open{color:var(--green)}
+.faqa{display:none;padding:0 22px 18px;font-size:14px;color:var(--g600);line-height:1.75}
+.faqa.show{display:block}
+.faqicon{font-size:20px;transition:transform .3s;color:var(--g400)}
+.faqq.open .faqicon{transform:rotate(45deg);color:var(--green)}
+
+/* ── JOBS ── */
+.jcard{background:#fff;border-radius:var(--rmd);padding:22px;border:1px solid var(--g200);box-shadow:var(--ss);display:flex;align-items:center;justify-content:space-between;gap:20px;transition:all .2s;margin-bottom:14px}
+.jcard:hover{border-color:var(--green);box-shadow:var(--sm)}
+.jtitle{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.jmeta{display:flex;gap:10px;flex-wrap:wrap}
+.jtag{font-size:12px;color:var(--g600);background:var(--g100);padding:3px 10px;border-radius:100px}
+
+/* ── MODAL ── */
+.mbg{position:fixed;inset:0;background:rgba(10,22,40,.75);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);animation:fadeIn .2s ease}
+.modal{background:#fff;border-radius:var(--rlg);padding:32px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--sl);position:relative;animation:fadeUp .3s ease}
+.modal h2{font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:6px}
+.modal .msub{font-size:14px;color:var(--g600);margin-bottom:22px}
+.mcl{position:absolute;top:14px;right:14px;background:var(--g100);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:100px;right:28px;z-index:9999;background:var(--navy);color:#fff;padding:14px 20px;border-radius:var(--rmd);font-size:14px;box-shadow:var(--sl);display:flex;align-items:center;gap:10px;border-left:4px solid var(--green);max-width:340px;animation:fadeUp .3s ease}
+.toast.err{border-left-color:var(--red)}
+
+/* ── MISC ── */
+.chatfloat{position:fixed;bottom:28px;right:28px;z-index:998;width:58px;height:58px;border-radius:50%;background:var(--green);color:#fff;border:none;font-size:26px;cursor:pointer;box-shadow:0 8px 28px rgba(26,138,90,.45);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.chatfloat:hover{transform:scale(1.1);background:#158048}
+.bbtn{display:inline-flex;align-items:center;gap:5px;font-size:14px;font-weight:500;color:var(--g600);cursor:pointer;border:none;background:none;transition:color .2s;margin-bottom:18px;font-family:'DM Sans',sans-serif;padding:0}
+.bbtn:hover{color:var(--green)}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.rend{display:flex;justify-content:flex-end;gap:10px;margin-top:28px}
+.gap10{display:flex;gap:10px;flex-wrap:wrap}
+.empty{text-align:center;padding:60px 20px;color:var(--g600)}
+.empty .ei{font-size:52px;margin-bottom:14px}
+.progrow{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:14px}
+.pb{flex:1;height:6px;background:var(--g100);border-radius:3px;overflow:hidden}
+.pbf{height:100%;background:var(--green);border-radius:3px}
+.errmsg{font-size:12px;color:var(--red);margin-top:4px}
+.notice{background:var(--gpale);border:1px solid rgba(26,138,90,.2);border-radius:var(--rsm);padding:12px 16px;font-size:13px;color:var(--g600);margin-bottom:16px}
+.barchrt{display:flex;align-items:flex-end;gap:12px;height:160px;padding:0 4px}
+.barcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.barv{font-size:11px;color:var(--g600)}
+.barf{width:100%;border-radius:4px 4px 0 0}
+.barl{font-size:11px;color:var(--g600)}
+
+@media(max-width:900px){
+  nav{padding:0 20px}.nav-links{display:none}.dlay{grid-template-columns:1fr}
+  .awrap{grid-template-columns:1fr}.aleft{display:none}.fgf{grid-template-columns:1fr}
+  .dside{width:56px;overflow:hidden}.fgrid{grid-template-columns:1fr}.twocol{grid-template-columns:1fr}
+  .srow{grid-template-columns:1fr 1fr}.sec{padding:50px 20px}.phdr{padding:16px 20px}.dlay{padding:20px}
+}
+@media(max-width:600px){
+  .srow{grid-template-columns:1fr}.pgrid{grid-template-columns:1fr}.lgrid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav>
+  <div class="brand" onclick="go('home')"><div class="ndot"></div>Basha<span>Lagbe</span></div>
+  <ul class="nav-links">
+    <li><a id="nl-home" class="active" onclick="go('home')">Home</a></li>
+    <li><a id="nl-listings" onclick="go('listings')">Properties</a></li>
+    <li><a id="nl-blog" onclick="go('blog')">Blog</a></li>
+    <li><a id="nl-about" onclick="go('about')">About</a></li>
+    <li><a id="nl-contact" onclick="go('contact')">Contact</a></li>
+  </ul>
+  <div class="nav-act" id="nav-act">
+    <button class="btn bo bsm" onclick="go('login')">Sign In</button>
+    <button class="btn bp bsm" onclick="go('signup')">Register Free</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HOME
+══════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="hgrid"></div></div>
+    <div class="hero-inner">
+      <div class="hbadge"><div class="hbdot"></div>Bangladesh's #1 Real Estate Platform</div>
+      <h1 class="htitle">Find Your Dream <em>Home</em><br>in Bangladesh</h1>
+      <p class="hsub">Discover thousands of verified properties across Dhaka, Chittagong, Sylhet &amp; beyond — buy, sell, or rent with confidence.</p>
+      <!-- SEARCH -->
+      <div class="sw">
+        <div class="stabs">
+          <button class="stab active" id="st-buy" onclick="setST('buy')">Buy</button>
+          <button class="stab" id="st-rent" onclick="setST('rent')">Rent</button>
+          <button class="stab" id="st-comm" onclick="setST('comm')">Commercial</button>
+        </div>
+        <div class="sdiv"></div>
+        <div class="sf"><label>Location</label>
+          <select id="sh-loc">
+            <option value="">All Bangladesh</option>
+            <option>Gulshan, Dhaka</option><option>Banani, Dhaka</option><option>Dhanmondi, Dhaka</option>
+            <option>Uttara, Dhaka</option><option>Baridhara, Dhaka</option><option>Mirpur, Dhaka</option>
+            <option>Chittagong</option><option>Sylhet</option><option>Rajshahi</option>
+            <option>Cox's Bazar</option><option>Gazipur</option>
+          </select>
+        </div>
+        <div class="sdiv"></div>
+        <div class="sf"><label>Property Type</label>
+          <select id="sh-type">
+            <option value="">Any Type</option><option>Apartment</option><option>Villa</option>
+            <option>Duplex</option><option>Commercial</option><option>Land</option>
+          </select>
+        </div>
+        <div class="sdiv"></div>
+        <div class="sf"><label>Budget</label>
+          <select id="sh-budget">
+            <option>Any Budget</option><option>Under ৳20L</option><option>৳20L–৳50L</option>
+            <option>৳50L–৳1Cr</option><option>৳1Cr–৳3Cr</option><option>৳3Cr+</option>
+          </select>
+        </div>
+        <button class="sbtn" onclick="doSearch()">🔍 Search</button>
+      </div>
+      <!-- STATS -->
+      <div class="hstats">
+        <div><div class="hn" id="hs1">0<em>+</em></div><div class="hl">Properties Listed</div></div>
+        <div><div class="hn" id="hs2">0<em>+</em></div><div class="hl">Happy Clients</div></div>
+        <div><div class="hn" id="hs3">0<em>+</em></div><div class="hl">Cities Covered</div></div>
+        <div><div class="hn" id="hs4">0</div><div class="hl">Years of Trust</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED -->
+  <div class="soffw"><div class="sec">
+    <div class="shdr-row">
+      <div><div class="slbl">Featured Properties</div><h2 class="stl">Handpicked for You</h2><p class="ssub">Verified premium listings curated by our property experts</p></div>
+      <button class="btn bo" onclick="go('listings')">View All Properties →</button>
+    </div>
+    <div class="pgrid" id="home-feat">
+      <div class="skel" style="height:340px;border-radius:var(--rlg)"></div>
+      <div class="skel" style="height:340px;border-radius:var(--rlg)"></div>
+      <div class="skel" style="height:340px;border-radius:var(--rlg)"></div>
+    </div>
+  </div></div>
+
+  <!-- LOCATIONS -->
+  <div class="swrap"><div class="sec">
+    <div class="shdr"><div class="slbl">Explore Cities</div><h2 class="stl">Trending Locations</h2><p class="ssub">Most searched destinations for real estate across Bangladesh</p></div>
+    <div class="lgrid">
+      <div class="lcard" onclick="gotoLoc('Gulshan')"><div style="font-size:36px;margin-bottom:8px">🌆</div><div style="font-size:15px;font-weight:600;color:var(--navy)">Gulshan</div><div style="font-size:12px;color:var(--g600);margin-top:3px">1,240 listings</div></div>
+      <div class="lcard" onclick="gotoLoc('Banani')"><div style="font-size:36px;margin-bottom:8px">🏙️</div><div style="font-size:15px;font-weight:600;color:var(--navy)">Banani</div><div style="font-size:12px;color:var(--g600);margin-top:3px">860 listings</div></div>
+      <div class="lcard" onclick="gotoLoc('Dhanmondi')"><div style="font-size:36px;margin-bottom:8px">🏘️</div><div style="font-size:15px;font-weight:600;color:var(--navy)">Dhanmondi</div><div style="font-size:12px;color:var(--g600);margin-top:3px">1,120 listings</div></div>
+      <div class="lcard" onclick="gotoLoc('Uttara')"><div style="font-size:36px;margin-bottom:8px">🏗️</div><div style="font-size:15px;font-weight:600;color:var(--navy)">Uttara</div><div style="font-size:12px;color:var(--g600);margin-top:3px">940 listings</div></div>
+      <div class="lcard" onclick="gotoLoc('Cox')"><div style="font-size:36px;margin-bottom:8px">🌊</div><div style="font-size:15px;font-weight:600;color:var(--navy)">Cox's Bazar</div><div style="font-size:12px;color:var(--g600);margin-top:3px">320 listings</div></div>
+      <div class="lcard" onclick="gotoLoc('Sylhet')"><div style="font-size:36px;margin-bottom:8px">🌿</div><div style="font-size:15px;font-weight:600;color:var(--navy)">Sylhet</div><div style="font-size:12px;color:var(--g600);margin-top:3px">580 listings</div></div>
+      <div class="lcard" onclick="gotoLoc('Chittagong')"><div style="font-size:36px;margin-bottom:8px">⚓</div><div style="font-size:15px;font-weight:600;color:var(--navy)">Chittagong</div><div style="font-size:12px;color:var(--g600);margin-top:3px">1,050 listings</div></div>
+      <div class="lcard" onclick="gotoLoc('Rajshahi')"><div style="font-size:36px;margin-bottom:8px">🌺</div><div style="font-size:15px;font-weight:600;color:var(--navy)">Rajshahi</div><div style="font-size:12px;color:var(--g600);margin-top:3px">420 listings</div></div>
+    </div>
+  </div></div>
+
+  <!-- AI -->
+  <div class="soffw"><div class="sec">
+    <div class="shdr"><div class="slbl">AI Powered</div><h2 class="stl">Smart Property Assistant</h2><p class="ssub">Ask anything about real estate in Bangladesh — powered by Claude AI</p></div>
+    <div class="aiwrap">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <div class="av" style="background:rgba(26,138,90,.2);font-size:16px">🤖</div>
+        <div><div style="font-size:15px;font-weight:600;color:#fff">BashaLagbe AI</div><div style="font-size:12px;color:rgba(255,255,255,.35)">Powered by Claude · Real estate expert for Bangladesh</div></div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green2)"><div style="width:6px;height:6px;border-radius:50%;background:var(--green2);animation:pulse 2s infinite"></div>Online</div>
+      </div>
+      <div class="aichat" id="ai-chat">
+        <div class="aimsg bot">👋 আমি BashaLagbe AI! I can help you find the perfect property, estimate prices, explain EMI options, and guide you through Bangladesh's property buying process. What would you like to know?</div>
+      </div>
+      <div class="aiinr"><input class="aiin" id="ai-in" placeholder="Ask about properties, prices, EMI, areas..." onkeydown="if(event.key==='Enter')aiSend()"><button class="btn bp" onclick="aiSend()">Ask →</button></div>
+      <div class="aiqs">
+        <button class="aiq" onclick="aiQ('Best apartments in Gulshan under 1 crore?')">💡 Gulshan under ৳1Cr?</button>
+        <button class="aiq" onclick="aiQ('Calculate EMI for 80 lakh home loan at 9% for 20 years')">💳 EMI for ৳80L?</button>
+        <button class="aiq" onclick="aiQ('Best areas in Dhaka for real estate investment in 2025?')">📈 Best investment areas?</button>
+        <button class="aiq" onclick="aiQ('What documents do I need to buy property in Bangladesh?')">📋 Buying documents?</button>
+        <button class="aiq" onclick="aiQ('Compare Cox Bazar vs Sylhet for vacation home investment')">🏖️ CXB vs Sylhet?</button>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- LUXURY -->
+  <div class="swrap"><div class="sec">
+    <div class="shdr-row">
+      <div><div class="slbl">Luxury Collection</div><h2 class="stl">Premium Properties</h2><p class="ssub">Exclusive villas and penthouses in Bangladesh's finest addresses</p></div>
+      <button class="btn bg" onclick="go('listings')">★ View Luxury →</button>
+    </div>
+    <div class="pgrid" id="home-lux"></div>
+  </div></div>
+
+  <!-- HOW IT WORKS -->
+  <div class="soffw"><div class="sec">
+    <div class="shdr" style="text-align:center"><div class="slbl" style="justify-content:center">Simple Process</div><h2 class="stl" style="text-align:center">How BashaLagbe Works</h2></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
+      <div style="text-align:center;padding:28px 20px;background:#fff;border-radius:var(--rlg);border:1px solid var(--g200);box-shadow:var(--ss)"><div style="width:60px;height:60px;background:var(--gpale);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px;border:2px solid rgba(26,138,90,.2)">🔍</div><div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:6px">Step 1</div><div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:8px">Search</div><div style="font-size:13px;color:var(--g600);line-height:1.6">Filter by location, price, type, and bedrooms</div></div>
+      <div style="text-align:center;padding:28px 20px;background:#fff;border-radius:var(--rlg);border:1px solid var(--g200);box-shadow:var(--ss)"><div style="width:60px;height:60px;background:var(--gpale);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px;border:2px solid rgba(26,138,90,.2)">❤️</div><div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:6px">Step 2</div><div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:8px">Save</div><div style="font-size:13px;color:var(--g600);line-height:1.6">Shortlist your favourites and compare</div></div>
+      <div style="text-align:center;padding:28px 20px;background:#fff;border-radius:var(--rlg);border:1px solid var(--g200);box-shadow:var(--ss)"><div style="width:60px;height:60px;background:var(--gpale);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px;border:2px solid rgba(26,138,90,.2)">🤝</div><div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:6px">Step 3</div><div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:8px">Connect</div><div style="font-size:13px;color:var(--g600);line-height:1.6">Contact agents via call, WhatsApp, or chat</div></div>
+      <div style="text-align:center;padding:28px 20px;background:#fff;border-radius:var(--rlg);border:1px solid var(--g200);box-shadow:var(--ss)"><div style="width:60px;height:60px;background:var(--gpale);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px;border:2px solid rgba(26,138,90,.2)">🏠</div><div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:6px">Step 4</div><div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:8px">Move In</div><div style="font-size:13px;color:var(--g600);line-height:1.6">Visit, negotiate, and close your deal</div></div>
+    </div>
+  </div></div>
+
+  <!-- TESTIMONIALS -->
+  <div class="swrap"><div class="sec">
+    <div class="shdr"><div class="slbl">Client Reviews</div><h2 class="stl">What Our Clients Say</h2><p class="ssub">Trusted by 50,000+ Bangladeshis for their real estate journey</p></div>
+    <div class="tgrid">
+      <div class="tc2"><div class="stars">★★★★★</div><div class="ttxt">"Found our dream flat in Gulshan within 2 weeks! The verified listings and agent support made the process completely stress-free."</div><div style="display:flex;align-items:center;gap:12px"><div class="av">RA</div><div><div style="font-weight:600;font-size:14px;color:var(--navy)">Rahim Ahmed</div><div style="font-size:12px;color:var(--g600)">Purchased in Gulshan, Dhaka</div></div></div></div>
+      <div class="tc2"><div class="stars">★★★★★</div><div class="ttxt">"The AI assistant helped me understand EMI and shortlisted perfect apartments for my budget. A truly modern platform built for Bangladeshis!"</div><div style="display:flex;align-items:center;gap:12px"><div class="av">SK</div><div><div style="font-weight:600;font-size:14px;color:var(--navy)">Shamima Khatun</div><div style="font-size:12px;color:var(--g600)">Rented in Dhanmondi, Dhaka</div></div></div></div>
+      <div class="tc2"><div class="stars">★★★★☆</div><div class="ttxt">"Sold my Sylhet property in 3 weeks at full asking price. The analytics in the dashboard helped me price it perfectly."</div><div style="display:flex;align-items:center;gap:12px"><div class="av">MI</div><div><div style="font-weight:600;font-size:14px;color:var(--navy)">Mohammad Iqbal</div><div style="font-size:12px;color:var(--g600)">Sold property in Sylhet</div></div></div></div>
+      <div class="tc2"><div class="stars">★★★★★</div><div class="ttxt">"The legal guidance and document checklist saved me from a potential fraud. BashaLagbe's verified agent network is truly trustworthy."</div><div style="display:flex;align-items:center;gap:12px"><div class="av">LB</div><div><div style="font-weight:600;font-size:14px;color:var(--navy)">Laila Begum</div><div style="font-size:12px;color:var(--g600)">Purchased plot in Rajshahi</div></div></div></div>
+      <div class="tc2"><div class="stars">★★★★★</div><div class="ttxt">"Listed my Cox's Bazar apartment and received 15 inquiries in the first week. The platform's reach across Bangladesh is incredible."</div><div style="display:flex;align-items:center;gap:12px"><div class="av">TH</div><div><div style="font-weight:600;font-size:14px;color:var(--navy)">Tariq Hossain</div><div style="font-size:12px;color:var(--g600)">Renting out in Cox's Bazar</div></div></div></div>
+      <div class="tc2"><div class="stars">★★★★☆</div><div class="ttxt">"As a first-time buyer, the AI guided me through every step. I bought my dream apartment in Bashundhara at a great price!"</div><div style="display:flex;align-items:center;gap:12px"><div class="av">NA</div><div><div style="font-weight:600;font-size:14px;color:var(--navy)">Nasreen Akter</div><div style="font-size:12px;color:var(--g600)">Purchased in Bashundhara, Dhaka</div></div></div></div>
+    </div>
+  </div></div>
+
+  <!-- NEWSLETTER -->
+  <div class="nlsec">
+    <div class="slbl" style="color:var(--green2);justify-content:center">Stay Updated</div>
+    <h2>Get New Listings in Your Inbox</h2>
+    <p>Be the first to know about new properties in your preferred city</p>
+    <div class="nlf">
+      <input class="nli" id="nl-email" placeholder="Enter your email address" onkeydown="if(event.key==='Enter')subNewsletter()">
+      <button class="btn bp" onclick="subNewsletter()">Subscribe</button>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:rgba(255,255,255,.3)">Join 28,000+ subscribers · Unsubscribe anytime</div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="fgf">
+      <div>
+        <div class="fbrand">Basha<span>Lagbe</span></div>
+        <div class="fdesc">Bangladesh's most trusted real estate marketplace. Buy, sell, and rent properties across all major cities with confidence and transparency.</div>
+        <div class="fcon">📍 Gulshan-2, Dhaka-1212, Bangladesh<br>📞 +880 1700-000000<br>✉️ hello@bashalagbe.com<br>💬 WhatsApp: +880 1700-000000</div>
+      </div>
+      <div class="fcol"><h4>Explore</h4><a onclick="go('listings')">Buy Property</a><a onclick="go('listings')">Rent Property</a><a onclick="go('listings')">Commercial Space</a><a onclick="go('listings')">Luxury Homes</a><a onclick="go('listings')">New Projects</a></div>
+      <div class="fcol"><h4>Company</h4><a onclick="go('about')">About Us</a><a onclick="go('contact')">Contact</a><a onclick="go('careers')">Careers</a><a onclick="go('blog')">Blog</a><a onclick="go('faq')">FAQ</a></div>
+      <div class="fcol"><h4>Legal</h4><a onclick="go('privacy')">Privacy Policy</a><a onclick="go('terms')">Terms &amp; Conditions</a><a onclick="go('login')">Agent Login</a><a onclick="go('signup')">Register</a></div>
+    </div>
+    <div class="fbot"><span>© 2025 BashaLagbe Ltd. All rights reserved.</span><span>Made with ❤️ in Bangladesh 🇧🇩</span></div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     LISTINGS
+══════════════════════════════════════ -->
+<div class="page" id="page-listings">
+  <div class="phdr">
+    <div><h1>Property Listings</h1><div style="font-size:14px;color:var(--g600);margin-top:2px" id="res-cnt">Loading...</div></div>
+    <div class="gap10">
+      <button class="btn bo bsm" onclick="go('home')">← Home</button>
+      <button class="btn bp bsm" onclick="authGate(()=>go('upload'))">+ List Property</button>
+    </div>
+  </div>
+  <div class="sec" style="padding-top:28px">
+    <div class="fbar">
+      <div class="fg"><label>Status</label><select id="f-status" onchange="applyF()"><option value="">Buy &amp; Rent</option><option value="buy">For Sale</option><option value="rent">For Rent</option></select></div>
+      <div class="fg"><label>Type</label><select id="f-type" onchange="applyF()"><option value="">All Types</option><option>Apartment</option><option>Villa</option><option>Duplex</option><option>Commercial</option><option>Land</option></select></div>
+      <div class="fg"><label>Location</label><select id="f-loc" onchange="applyF()"><option value="">All Cities</option><option>Gulshan</option><option>Banani</option><option>Dhanmondi</option><option>Uttara</option><option>Baridhara</option><option>Chittagong</option><option>Sylhet</option><option>Cox's Bazar</option><option>Gazipur</option></select></div>
+      <div class="fg"><label>Bedrooms</label><select id="f-beds" onchange="applyF()"><option value="">Any</option><option value="1">1+</option><option value="2">2+</option><option value="3">3+</option><option value="4">4+</option></select></div>
+      <div class="fg"><label>Search</label><input id="f-search" placeholder="Title or keyword..." oninput="applyF()" style="min-width:140px"></div>
+      <div class="fg"><label>Sort</label>
+        <div class="srtrow">
+          <button class="srtbtn active" onclick="setSort(this,'latest')">Latest</button>
+          <button class="srtbtn" onclick="setSort(this,'low')">Price ↑</button>
+          <button class="srtbtn" onclick="setSort(this,'high')">Price ↓</button>
+          <button class="srtbtn" onclick="setSort(this,'views')">Popular</button>
+        </div>
+      </div>
+    </div>
+    <div class="pgrid" id="list-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PROPERTY DETAIL
+══════════════════════════════════════ -->
+<div class="page" id="page-detail">
+  <div class="dhero" id="d-hero">
+    <div class="dov"></div>
+    <div style="position:absolute;bottom:0;right:0;padding:12px;z-index:3">
+      <div style="background:rgba(0,0,0,.5);border-radius:var(--rsm);padding:6px 12px;font-size:12px;color:#fff;cursor:pointer;backdrop-filter:blur(8px)" onclick="openGallery(0)">📸 View All Photos</div>
+    </div>
+    <div class="dinfo" id="d-info"></div>
+  </div>
+  <div class="dlay">
+    <div>
+      <button class="bbtn" onclick="go('listings')">← Back to Listings</button>
+      <div class="dsec" id="d-specs"></div>
+      <div class="dsec"><h3>📸 Photo Gallery</h3><div class="galgrid" id="d-gallery"></div></div>
+      <div class="dsec" id="d-desc"></div>
+      <div class="dsec">
+        <h3>🗺️ Location &amp; Map</h3>
+        <div class="mapb">
+          <div class="mpin" style="top:28%;left:42%">📍</div>
+          <div class="mpin" style="top:55%;left:58%;animation-delay:1.2s;font-size:20px">🏢</div>
+          <div class="mpin" style="top:38%;left:28%;animation-delay:.6s;font-size:16px">🕌</div>
+          <div class="mctr">
+            <div style="font-size:40px;margin-bottom:8px">🗺️</div>
+            <div id="d-maploc" style="font-size:14px;color:var(--g600);margin-bottom:12px">Dhaka, Bangladesh</div>
+            <button class="btn bo bsm" id="d-gmaps-btn">Open in Google Maps ↗</button>
+          </div>
+        </div>
+      </div>
+      <div class="dsec"><h3>🏪 Nearby Places</h3><div class="ngrid" id="d-nearby"></div></div>
+      <div class="dsec"><h3>🛋️ Amenities</h3><div class="agrid" id="d-amen"></div></div>
+      <div class="dsec">
+        <h3>⭐ Reviews &amp; Ratings</h3>
+        <div id="d-reviews"></div>
+        <div id="d-rv-form" style="display:none;margin-top:20px;padding-top:16px;border-top:1px solid var(--g200)">
+          <h4 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:12px">Write a Review</h4>
+          <div class="fgp" style="margin-bottom:12px"><label class="flbl">Rating</label><select id="rv-rating" class="fin" style="width:200px"><option value="5">★★★★★ Excellent</option><option value="4">★★★★☆ Good</option><option value="3">★★★☆☆ Average</option><option value="2">★★☆☆☆ Poor</option><option value="1">★☆☆☆☆ Terrible</option></select></div>
+          <div class="fgp" style="margin-bottom:12px"><label class="flbl">Your Review</label><textarea class="ftxt" id="rv-text" style="min-height:80px" placeholder="Share your honest experience..."></textarea></div>
+          <button class="btn bp" onclick="submitReview()">Submit Review</button>
+          <button class="btn bo" style="margin-left:10px" onclick="document.getElementById('d-rv-form').style.display='none';document.getElementById('rv-btn').style.display=''">Cancel</button>
+        </div>
+        <button class="btn bo bsm" id="rv-btn" style="margin-top:14px" onclick="authGate(()=>{document.getElementById('d-rv-form').style.display='block';document.getElementById('rv-btn').style.display='none'})">✍️ Write a Review</button>
+      </div>
+    </div>
+    <!-- SIDEBAR -->
+    <div>
+      <div class="ccard">
+        <h3>Contact Agent</h3>
+        <div id="d-agent" style="display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--g200)"></div>
+        <button class="btn bp bbl" id="btn-call" onclick="callAgent()">📞 Call Agent</button>
+        <button class="btn bw bbl" id="btn-wa" onclick="waAgent()">💬 WhatsApp</button>
+        <button class="btn bo bbl" onclick="openVisitModal()">📅 Schedule a Visit</button>
+        <button class="btn bn bbl" id="fav-btn" onclick="toggleFav()">❤️ Save Property</button>
+        <button class="btn bo bbl" onclick="openInqModal()">✉️ Send Inquiry</button>
+        <div class="emibox">
+          <h4 style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px">🏦 EMI Calculator</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div><div style="font-size:11px;color:var(--g600);margin-bottom:4px">Loan Amount (৳)</div><input type="number" id="emi-loan" class="isml" placeholder="5000000" oninput="calcEMI()"></div>
+            <div><div style="font-size:11px;color:var(--g600);margin-bottom:4px">Years</div><input type="number" id="emi-yrs" class="isml" value="20" oninput="calcEMI()"></div>
+          </div>
+          <div style="margin-bottom:8px"><div style="font-size:11px;color:var(--g600);margin-bottom:4px">Interest Rate (% p.a.)</div><input type="number" id="emi-rate" class="isml" value="9" step="0.1" oninput="calcEMI()"></div>
+          <div class="emires" id="emi-res"><div class="emiamt">৳0</div><div style="font-size:12px;color:var(--g600);margin-top:2px">Monthly EMI</div></div>
+          <div style="font-size:11px;color:var(--g400);margin-top:6px;text-align:center">BRAC 9% · Dutch-Bangla 8.5% · EBL 9.5%</div>
+        </div>
+        <!-- AI PRICE ESTIMATE -->
+        <div style="background:var(--gpale);border-radius:var(--rsm);padding:14px;margin-top:14px;border:1px solid rgba(26,138,90,.18)">
+          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px">🤖 AI Price Analysis</div>
+          <div style="font-size:12px;color:var(--g600);line-height:1.65" id="d-ai-price">Loading price analysis...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- SIMILAR -->
+  <div class="soffw" style="padding-top:0"><div class="sec"><div class="shdr"><div class="slbl">You May Also Like</div><h2 class="stl">Similar Properties</h2></div><div class="pgrid" id="sim-grid"></div></div></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DASHBOARD
+══════════════════════════════════════ -->
+<div class="page" id="page-dashboard">
+  <div class="dlout">
+    <div class="dside">
+      <div class="duser">
+        <div class="av avxl" style="margin:0 auto" id="d-avat">?</div>
+        <div class="dun" id="d-uname">User</div>
+        <div class="dur" id="d-urole">Member</div>
+        <div class="dbd">★ Member</div>
+      </div>
+      <div class="dnav">
+        <button class="dni active" onclick="dTab('overview',this)"><span class="dnic">📊</span><span>Overview</span></button>
+        <button class="dni" onclick="dTab('saved',this)"><span class="dnic">❤️</span><span>Saved</span></button>
+        <button class="dni" onclick="dTab('mylist',this)"><span class="dnic">🏠</span><span>My Listings</span></button>
+        <button class="dni" onclick="dTab('inquiries',this)"><span class="dnic">📬</span><span>Inquiries</span></button>
+        <button class="dni" onclick="dTab('visits',this)"><span class="dnic">📅</span><span>Visits</span></button>
+        <button class="dni" onclick="dTab('analytics',this)"><span class="dnic">📈</span><span>Analytics</span></button>
+        <button class="dni" onclick="dTab('messages',this)"><span class="dnic">💬</span><span>Messages</span></button>
+        <button class="dni" onclick="go('upload')"><span class="dnic">➕</span><span>Add Listing</span></button>
+        <button class="dni" onclick="dTab('profile',this)"><span class="dnic">👤</span><span>Profile</span></button>
+        <div class="dsep"></div>
+        <button class="dni" id="admin-link" style="display:none" onclick="dTab('admin',this)"><span class="dnic">🛡️</span><span>Admin Panel</span></button>
+        <button class="dni" onclick="logout()"><span class="dnic">🚪</span><span>Logout</span></button>
+      </div>
+    </div>
+    <div class="dcont" id="dash-cont"><div class="empty"><div class="ei">⏳</div><div>Loading...</div></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     LOGIN
+══════════════════════════════════════ -->
+<div class="page" id="page-login">
+  <div class="awrap">
+    <div class="aleft">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 60%,rgba(26,138,90,.2) 0%,transparent 60%)"></div>
+      <div class="alin">
+        <div style="font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:40px">Basha<span style="color:var(--green2)">Lagbe</span></div>
+        <h2>Your Next Home is One Click Away</h2>
+        <p>Join 50,000+ Bangladeshis who trust BashaLagbe for their real estate journey.</p>
+        <div style="margin-top:32px">
+          <div class="aperk"><span class="apic">✓</span>10,000+ Verified Listings</div>
+          <div class="aperk"><span class="apic">✓</span>AI-Powered Recommendations</div>
+          <div class="aperk"><span class="apic">✓</span>Direct Agent Communication</div>
+          <div class="aperk"><span class="apic">✓</span>Secure Transactions</div>
+        </div>
+      </div>
+    </div>
+    <div class="aright">
+      <div class="aform">
+        <h3>Welcome Back</h3>
+        <p class="asub">Sign in to your BashaLagbe account</p>
+        <div id="l-err" style="display:none;background:#fee2e2;border-radius:var(--rsm);padding:10px;font-size:13px;color:#991b1b;margin-bottom:14px"></div>
+        <div class="igp"><label>Email Address</label><input type="email" id="l-email" placeholder="your@email.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <div class="igp"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <div style="text-align:right;margin-bottom:20px"><a style="font-size:13px;color:var(--green);cursor:pointer" onclick="toast('📧 Password reset — connect Firebase Auth for this feature')">Forgot password?</a></div>
+        <button class="btn bp blg bbl" id="l-btn" onclick="doLogin()">Sign In to Dashboard</button>
+        <div class="aft">Don't have an account? <a onclick="go('signup')">Create one free</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SIGNUP
+══════════════════════════════════════ -->
+<div class="page" id="page-signup">
+  <div class="awrap">
+    <div class="aleft">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 70% 40%,rgba(26,138,90,.18) 0%,transparent 60%)"></div>
+      <div class="alin">
+        <div style="font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:40px">Basha<span style="color:var(--green2)">Lagbe</span></div>
+        <h2>Start Your Real Estate Journey Today</h2>
+        <p>Create a free account and access thousands of verified properties across Bangladesh.</p>
+        <div style="margin-top:32px">
+          <div class="aperk"><span class="apic">✓</span>Free Account — No Hidden Fees</div>
+          <div class="aperk"><span class="apic">✓</span>Save &amp; Track Favourites</div>
+          <div class="aperk"><span class="apic">✓</span>Chat Directly with Agents</div>
+          <div class="aperk"><span class="apic">✓</span>List Your Own Property</div>
+        </div>
+      </div>
+    </div>
+    <div class="aright">
+      <div class="aform">
+        <h3>Create Account</h3>
+        <p class="asub">Join BashaLagbe for free today</p>
+        <div id="s-err" style="display:none;background:#fee2e2;border-radius:var(--rsm);padding:10px;font-size:13px;color:#991b1b;margin-bottom:14px"></div>
+        <div class="igp"><label>Full Name *</label><input type="text" id="s-name" placeholder="Rahim Ahmed"></div>
+        <div class="igp"><label>Email Address *</label><input type="email" id="s-email" placeholder="your@email.com"></div>
+        <div class="igp"><label>Phone Number</label><input type="tel" id="s-phone" placeholder="+880 1700-000000"></div>
+        <div class="igp"><label>Account Type</label><select id="s-role"><option value="user">Buyer / Renter</option><option value="agent">Property Owner / Agent</option></select></div>
+        <div class="igp"><label>Password *</label><input type="password" id="s-pass" placeholder="Minimum 8 characters" onkeydown="if(event.key==='Enter')doSignup()"></div>
+        <button class="btn bp blg bbl" id="s-btn" onclick="doSignup()">Create My Account</button>
+        <div class="aft">Already have an account? <a onclick="go('login')">Sign in</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     UPLOAD / LIST PROPERTY
+══════════════════════════════════════ -->
+<div class="page" id="page-upload">
+  <div class="phdr"><div><h1>List Your Property</h1><div style="font-size:14px;color:var(--g600);margin-top:2px">Fill in details to publish your listing</div></div><button class="btn bo bsm" onclick="go('dashboard')">← Dashboard</button></div>
+  <div class="sec" style="padding-top:28px;max-width:940px">
+    <div class="uform">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:24px">📋 Property Details</div>
+      <div id="u-err" style="display:none;background:#fee2e2;border-radius:var(--rsm);padding:10px;font-size:13px;color:#991b1b;margin-bottom:14px"></div>
+      <div class="fgrid">
+        <div class="fgp s2"><label class="flbl">Property Title *</label><input class="fin" id="u-title" placeholder="e.g. Luxury 3BHK Apartment with City View in Gulshan-2"></div>
+        <div class="fgp"><label class="flbl">Property Type *</label><select class="fsel" id="u-type"><option>Apartment</option><option>Villa</option><option>Duplex</option><option>Commercial Space</option><option>Office Space</option><option>Land / Plot</option><option>Warehouse</option></select></div>
+        <div class="fgp"><label class="flbl">Listing For *</label><select class="fsel" id="u-status"><option value="buy">For Sale</option><option value="rent">For Rent</option></select></div>
+        <div class="fgp"><label class="flbl">Price (৳) *</label><input class="fin" type="number" id="u-price" placeholder="e.g. 12000000"></div>
+        <div class="fgp"><label class="flbl">City / Area *</label><input class="fin" id="u-loc" placeholder="e.g. Gulshan-2, Dhaka"></div>
+        <div class="fgp"><label class="flbl">Bedrooms</label><select class="fsel" id="u-beds"><option>0</option><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6+</option></select></div>
+        <div class="fgp"><label class="flbl">Bathrooms</label><select class="fsel" id="u-baths"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5+</option></select></div>
+        <div class="fgp"><label class="flbl">Area (sq ft)</label><input class="fin" type="number" id="u-sqft" placeholder="e.g. 1800"></div>
+        <div class="fgp"><label class="flbl">Furnishing</label><select class="fsel" id="u-furn"><option>Unfurnished</option><option>Semi-Furnished</option><option>Fully Furnished</option></select></div>
+        <div class="fgp"><label class="flbl">Property Status</label><select class="fsel" id="u-pstatus"><option>Ready to Move</option><option>Under Construction</option><option>New Project</option></select></div>
+        <div class="fgp"><label class="flbl">Floor</label><input class="fin" id="u-floor" placeholder="e.g. 5th Floor, 12 storeys total"></div>
+        <div class="fgp"><label class="flbl">Facing</label><select class="fsel" id="u-facing"><option>East</option><option>West</option><option>North</option><option>South</option><option>Corner</option></select></div>
+        <div class="fgp s2"><label class="flbl">Description *</label><textarea class="ftxt" id="u-desc" placeholder="Describe the property: layout, finishes, surroundings, unique features, nearby landmarks..."></textarea></div>
+        <div class="fgp"><label class="flbl">Agent / Owner Name</label><input class="fin" id="u-aname" placeholder="Your full name"></div>
+        <div class="fgp"><label class="flbl">Contact Number</label><input class="fin" id="u-aphone" placeholder="+880 1700-000000"></div>
+        <div class="fgp"><label class="flbl">WhatsApp Number</label><input class="fin" id="u-awa" placeholder="+880 1700-000000"></div>
+        <div class="fgp"><label class="flbl">Email Address</label><input class="fin" type="email" id="u-aemail" placeholder="agent@email.com"></div>
+        <div class="fgp s2"><label class="flbl">Amenities (check all that apply)</label><div id="amen-chk" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px"></div></div>
+        <div class="fgp s2">
+          <label class="flbl">Image URL (paste a direct image link)</label>
+          <input class="fin" id="u-img" placeholder="https://images.unsplash.com/...">
+          <div style="font-size:12px;color:var(--g400);margin-top:4px">Tip: Right-click any image online → Copy Image Address → paste here</div>
+        </div>
+        <div class="fgp s2">
+          <label class="flbl">Extra Image URLs (one per line)</label>
+          <textarea class="ftxt" id="u-imgs" style="min-height:80px" placeholder="https://images.unsplash.com/...&#10;https://images.unsplash.com/..."></textarea>
+        </div>
+      </div>
+      <div class="rend">
+        <button class="btn bo" onclick="go('dashboard')">Cancel</button>
+        <button class="btn bn" onclick="saveDraft()">Save Draft</button>
+        <button class="btn bp blg" id="u-btn" onclick="submitProp()">Submit Listing</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     ABOUT
+══════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="ahero">
+    <div class="slbl" style="color:var(--green2);justify-content:center;margin-bottom:12px">Our Story</div>
+    <h1>About BashaLagbe</h1>
+    <p>Bangladesh's most trusted property marketplace, connecting buyers, sellers, and renters since 2019.</p>
+  </div>
+  <div class="swrap"><div class="sec">
+    <div class="twocol" style="margin-bottom:64px">
+      <div>
+        <div class="slbl">Our Mission</div>
+        <h2 class="stl" style="font-size:32px">Making Property Search Simple for Every Bangladeshi</h2>
+        <p style="color:var(--g600);line-height:1.85;margin-top:14px;font-size:15px">BashaLagbe was founded with one vision: bring transparency, trust, and technology to Bangladesh's real estate market. We believe every family deserves to find their perfect home without hassle or fraud.</p>
+        <p style="color:var(--g600);line-height:1.85;margin-top:12px;font-size:15px">From Dhaka to Cox's Bazar, our AI-powered platform connects thousands of buyers, sellers, and renters every month. We're building the infrastructure Bangladesh's property market needs.</p>
+        <div class="gap10" style="margin-top:24px">
+          <button class="btn bp" onclick="go('contact')">Contact Us</button>
+          <button class="btn bo" onclick="go('careers')">Join Our Team</button>
+        </div>
+      </div>
+      <div style="background:var(--gpale);border-radius:var(--rxl);padding:48px;text-align:center;border:1px solid rgba(26,138,90,.18)">
+        <div style="font-size:64px;margin-bottom:12px">🏠</div>
+        <div style="font-family:'Playfair Display',serif;font-size:52px;font-weight:700;color:var(--navy)">50K+</div>
+        <div style="font-size:16px;color:var(--g600)">Happy Families Housed</div>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:13px;color:var(--g600);display:flex;align-items:center;gap:8px"><span style="color:var(--green)">✓</span>RJSC Registered Company</div>
+          <div style="font-size:13px;color:var(--g600);display:flex;align-items:center;gap:8px"><span style="color:var(--green)">✓</span>SSL Secured Platform</div>
+          <div style="font-size:13px;color:var(--g600);display:flex;align-items:center;gap:8px"><span style="color:var(--green)">✓</span>Verified Agent Network</div>
+        </div>
+      </div>
+    </div>
+    <div class="srow" style="margin-bottom:64px">
+      <div class="scard" style="text-align:center"><div class="sval">2019</div><div class="slb">Year Founded</div></div>
+      <div class="scard" style="text-align:center"><div class="sval">12+</div><div class="slb">Cities Covered</div></div>
+      <div class="scard" style="text-align:center"><div class="sval">10K+</div><div class="slb">Active Listings</div></div>
+      <div class="scard" style="text-align:center"><div class="sval">98%</div><div class="slb">Satisfaction Rate</div></div>
+    </div>
+    <div class="shdr"><div class="slbl">Our Team</div><h2 class="stl">The People Behind BashaLagbe</h2></div>
+    <div class="tgrid2">
+      <div class="tc3"><div class="tav">AR</div><div style="font-size:16px;font-weight:600;color:var(--navy)">Ahmed Rahman</div><div style="font-size:13px;color:var(--g600);margin-top:3px">CEO &amp; Co-Founder</div><div style="font-size:12px;color:var(--g400);margin-top:4px">Ex-BRAC · IBA MBA</div></div>
+      <div class="tc3"><div class="tav">SK</div><div style="font-size:16px;font-weight:600;color:var(--navy)">Sarah Khan</div><div style="font-size:13px;color:var(--g600);margin-top:3px">Chief Technology Officer</div><div style="font-size:12px;color:var(--g400);margin-top:4px">Ex-Google · BUET CSE</div></div>
+      <div class="tc3"><div class="tav">MI</div><div style="font-size:16px;font-weight:600;color:var(--navy)">Minhaj Islam</div><div style="font-size:13px;color:var(--g600);margin-top:3px">Head of Product</div><div style="font-size:12px;color:var(--g400);margin-top:4px">Ex-Pathao · BUET</div></div>
+      <div class="tc3"><div class="tav">RB</div><div style="font-size:16px;font-weight:600;color:var(--navy)">Razia Begum</div><div style="font-size:13px;color:var(--g600);margin-top:3px">Head of Agent Relations</div><div style="font-size:12px;color:var(--g400);margin-top:4px">15yr Real Estate Exp.</div></div>
+      <div class="tc3"><div class="tav">TM</div><div style="font-size:16px;font-weight:600;color:var(--navy)">Tariq Miah</div><div style="font-size:13px;color:var(--g600);margin-top:3px">Lead Developer</div><div style="font-size:12px;color:var(--g400);margin-top:4px">Full Stack · NSU CSE</div></div>
+      <div class="tc3"><div class="tav">NA</div><div style="font-size:16px;font-weight:600;color:var(--navy)">Nusrat Amin</div><div style="font-size:13px;color:var(--g600);margin-top:3px">Head of Marketing</div><div style="font-size:12px;color:var(--g400);margin-top:4px">DU MBA Marketing</div></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CONTACT
+══════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="ahero" style="padding-bottom:60px">
+    <div class="slbl" style="color:var(--green2);justify-content:center;margin-bottom:12px">Get In Touch</div>
+    <h1 style="font-size:44px">Contact Us</h1>
+    <p>Our team is ready to help you every step of the way.</p>
+  </div>
+  <div class="swrap"><div class="sec" style="padding-top:40px;max-width:960px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+      <div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:22px">Send Us a Message</h3>
+        <div id="c-err" style="display:none;background:#fee2e2;border-radius:var(--rsm);padding:10px;font-size:13px;color:#991b1b;margin-bottom:14px"></div>
+        <div class="igp"><label>Your Name *</label><input type="text" id="c-name" placeholder="Rahim Ahmed"></div>
+        <div class="igp"><label>Email Address *</label><input type="email" id="c-email" placeholder="you@email.com"></div>
+        <div class="igp"><label>Phone (optional)</label><input type="tel" id="c-phone" placeholder="+880 1700-000000"></div>
+        <div class="igp"><label>Subject</label><select id="c-subj" style="border:1.5px solid var(--g200);border-radius:var(--rsm);padding:11px 14px;font-size:14px;outline:none;width:100%;font-family:'DM Sans',sans-serif;background:#fff"><option>Property Inquiry</option><option>Agent Registration</option><option>Technical Support</option><option>Report a Listing</option><option>Partnership</option><option>Media Inquiry</option><option>Other</option></select></div>
+        <div class="igp"><label>Message *</label><textarea id="c-msg" style="border:1.5px solid var(--g200);border-radius:var(--rsm);padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;width:100%;min-height:130px;outline:none;resize:vertical;transition:border-color .2s" placeholder="Tell us how we can help..."></textarea></div>
+        <button class="btn bp blg" id="c-btn" onclick="submitContact()">Send Message</button>
+      </div>
+      <div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:22px">Contact Information</h3>
+        <div style="display:flex;flex-direction:column;gap:22px">
+          <div style="display:flex;align-items:flex-start;gap:14px"><div style="font-size:28px">📍</div><div><div style="font-weight:600;color:var(--navy);margin-bottom:4px">Head Office</div><div style="font-size:14px;color:var(--g600);line-height:1.7">House 12, Road 11, Gulshan-2<br>Dhaka-1212, Bangladesh</div></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px"><div style="font-size:28px">📞</div><div><div style="font-weight:600;color:var(--navy);margin-bottom:4px">Phone</div><div style="font-size:14px;color:var(--g600)">+880 1700-000000<br>+880 1800-000000</div></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px"><div style="font-size:28px">✉️</div><div><div style="font-weight:600;color:var(--navy);margin-bottom:4px">Email</div><div style="font-size:14px;color:var(--g600)">hello@bashalagbe.com<br>support@bashalagbe.com</div></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px"><div style="font-size:28px">💬</div><div><div style="font-weight:600;color:var(--navy);margin-bottom:4px">WhatsApp Support</div><div style="font-size:14px;color:var(--g600)">+880 1700-000000<br>Daily 9AM – 9PM</div></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px"><div style="font-size:28px">🕒</div><div><div style="font-weight:600;color:var(--navy);margin-bottom:4px">Office Hours</div><div style="font-size:14px;color:var(--g600)">Saturday – Thursday: 9AM – 7PM<br>Friday: Closed</div></div></div>
+        </div>
+        <div style="background:var(--gpale);border-radius:var(--rmd);padding:20px;margin-top:24px;border:1px solid rgba(26,138,90,.15)">
+          <div style="font-weight:600;color:var(--navy);margin-bottom:6px">🤖 Try AI Chat First</div>
+          <div style="font-size:13px;color:var(--g600);line-height:1.65">Many questions can be answered instantly by our AI assistant. Try it!</div>
+          <button class="btn bp bsm" style="margin-top:12px" onclick="go('home')">Open AI Chat →</button>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     BLOG
+══════════════════════════════════════ -->
+<div class="page" id="page-blog">
+  <div class="phdr"><div><h1>Blog &amp; News</h1><div style="font-size:14px;color:var(--g600);margin-top:2px">Real estate insights and market trends for Bangladesh</div></div><button class="btn bo bsm" onclick="go('home')">← Home</button></div>
+  <div class="sec">
+    <div style="background:linear-gradient(135deg,var(--navy) 0%,#1a3a5c 100%);border-radius:var(--rxl);padding:48px;margin-bottom:48px;display:flex;gap:40px;align-items:center;flex-wrap:wrap">
+      <div style="font-size:80px;flex-shrink:0">📊</div>
+      <div>
+        <span class="badge bgreen" style="margin-bottom:12px;display:inline-block">Featured Report</span>
+        <h2 style="font-family:'Playfair Display',serif;font-size:28px;color:#fff;margin-bottom:12px;line-height:1.3">Bangladesh Real Estate Market 2025: Prices Up 15% in Gulshan &amp; Banani</h2>
+        <p style="font-size:15px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:18px">Our analysis of Dhaka's premium property market reveals sustained growth driven by limited supply, rising NRB investment, and improved infrastructure...</p>
+        <button class="btn bp" onclick="toast('📖 Full article — connect your CMS or add blog content here!')">Read Full Report →</button>
+      </div>
+    </div>
+    <div class="shdr"><div class="slbl">Latest Articles</div><h2 class="stl">Property Insights &amp; Guides</h2></div>
+    <div class="blogrid">
+      <div class="bcard" onclick="toast('📖 Add your article URL here!')"><div class="bimg">📈</div><div class="bbody"><div class="bcat">Market Trends</div><div class="btitle">Top 5 Areas to Invest in Dhaka Real Estate in 2025</div><div class="bexc">Bashundhara, Purbachal, and Aftabnagar are emerging as the hottest investment spots for savvy buyers looking for 3–5 year returns...</div><div class="bmeta"><span>📅 Dec 10, 2025</span><span>·</span><span>5 min read</span><span>·</span><span>👁️ 4,820</span></div></div></div>
+      <div class="bcard" onclick="toast('📖 Add your article URL here!')"><div class="bimg">🏠</div><div class="bbody"><div class="bcat">Buyer's Guide</div><div class="btitle">Complete Guide: How to Buy Property in Bangladesh (2025)</div><div class="bexc">A step-by-step walkthrough of the legal process, required documents, registration fees, and pitfalls to avoid...</div><div class="bmeta"><span>📅 Dec 5, 2025</span><span>·</span><span>12 min read</span><span>·</span><span>👁️ 9,130</span></div></div></div>
+      <div class="bcard" onclick="toast('📖 Add your article URL here!')"><div class="bimg">💳</div><div class="bbody"><div class="bcat">Finance</div><div class="btitle">Best Home Loan Banks in Bangladesh 2025: Rates Compared</div><div class="bexc">We compared 12 major Bangladeshi banks on home loan rates, processing fees, and tenure flexibility...</div><div class="bmeta"><span>📅 Nov 28, 2025</span><span>·</span><span>7 min read</span><span>·</span><span>👁️ 6,450</span></div></div></div>
+      <div class="bcard" onclick="toast('📖 Add your article URL here!')"><div class="bimg">🌊</div><div class="bbody"><div class="bcat">Investment</div><div class="btitle">Cox's Bazar: Is It the Right Time to Buy Beach Property?</div><div class="bexc">Marine Drive is expanding and hotel occupancy is at record highs — vacation rentals delivering 14–18% annual yields...</div><div class="bmeta"><span>📅 Nov 20, 2025</span><span>·</span><span>6 min read</span><span>·</span><span>👁️ 3,870</span></div></div></div>
+      <div class="bcard" onclick="toast('📖 Add your article URL here!')"><div class="bimg">🏢</div><div class="bbody"><div class="bcat">Commercial</div><div class="btitle">Dhaka's Commercial Real Estate Boom: Office Space Demand Up 30%</div><div class="bexc">Post-pandemic recovery and the rise of tech startups are driving unprecedented demand for Grade-A offices...</div><div class="bmeta"><span>📅 Nov 12, 2025</span><span>·</span><span>5 min read</span><span>·</span><span>👁️ 2,920</span></div></div></div>
+      <div class="bcard" onclick="toast('📖 Add your article URL here!')"><div class="bimg">🌿</div><div class="bbody"><div class="bcat">Lifestyle</div><div class="btitle">Sylhet vs Chittagong: Which City Offers Better Quality of Life?</div><div class="bexc">We compare both cities across cost of living, infrastructure, schools, and property appreciation rates...</div><div class="bmeta"><span>📅 Nov 5, 2025</span><span>·</span><span>8 min read</span><span>·</span><span>👁️ 5,210</span></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     FAQ
+══════════════════════════════════════ -->
+<div class="page" id="page-faq">
+  <div class="ahero" style="padding-bottom:60px"><div class="slbl" style="color:var(--green2);justify-content:center;margin-bottom:12px">Help Center</div><h1 style="font-size:44px">Frequently Asked Questions</h1><p>Everything you need to know about BashaLagbe and Bangladeshi real estate</p></div>
+  <div class="swrap"><div class="sec" style="max-width:800px;padding-top:40px" id="faq-cont">
+    <div style="text-align:center;padding:40px;background:var(--gpale);border-radius:var(--rxl);margin-top:40px;border:1px solid rgba(26,138,90,.15)">
+      <div style="font-size:36px;margin-bottom:12px">🤖</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:8px">Still have questions?</h3>
+      <p style="font-size:14px;color:var(--g600);margin-bottom:20px">Ask our AI assistant or contact our support team directly</p>
+      <div class="gap10" style="justify-content:center">
+        <button class="btn bp" onclick="go('home')">Ask AI Assistant</button>
+        <button class="btn bo" onclick="go('contact')">Contact Support</button>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CAREERS
+══════════════════════════════════════ -->
+<div class="page" id="page-careers">
+  <div class="ahero" style="padding-bottom:60px"><div class="slbl" style="color:var(--green2);justify-content:center;margin-bottom:12px">Join Our Team</div><h1 style="font-size:44px">Careers at BashaLagbe</h1><p>Help us transform how Bangladesh buys and sells property</p></div>
+  <div class="swrap"><div class="sec" style="padding-top:40px;max-width:900px">
+    <div class="twocol" style="margin-bottom:60px;align-items:start">
+      <div>
+        <div class="slbl">Why Join Us?</div>
+        <h2 class="stl" style="font-size:28px">Build Bangladesh's Real Estate Future</h2>
+        <p style="color:var(--g600);line-height:1.85;margin-top:12px;font-size:15px">We're a fast-growing proptech startup based in Dhaka. We offer competitive salaries, flexible work arrangements, and the opportunity to make a real impact on millions of Bangladeshi families.</p>
+        <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--g600)"><span class="badge bsuccess">✓</span>Competitive BDT salary + equity</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--g600)"><span class="badge bsuccess">✓</span>Hybrid / remote work policy</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--g600)"><span class="badge bsuccess">✓</span>Health insurance &amp; annual bonus</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--g600)"><span class="badge bsuccess">✓</span>Learning &amp; development budget</div>
+        </div>
+      </div>
+      <div style="background:var(--gpale);border-radius:var(--rxl);padding:32px;border:1px solid rgba(26,138,90,.15);text-align:center">
+        <div style="font-size:48px;margin-bottom:16px">🚀</div>
+        <div class="srow" style="grid-template-columns:1fr 1fr;gap:12px">
+          <div class="scard" style="padding:16px;text-align:center"><div class="sval" style="font-size:24px">8</div><div class="slb" style="font-size:12px">Open Roles</div></div>
+          <div class="scard" style="padding:16px;text-align:center"><div class="sval" style="font-size:24px">45</div><div class="slb" style="font-size:12px">Team Size</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="slbl" style="margin-bottom:20px">Open Positions</div>
+    <div id="jobs-list"></div>
+  </div></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PRIVACY
+══════════════════════════════════════ -->
+<div class="page" id="page-privacy">
+  <div class="phdr"><div><h1>Privacy Policy</h1><div style="font-size:14px;color:var(--g600);margin-top:2px">Last updated: December 2025</div></div><button class="btn bo bsm" onclick="go('home')">← Home</button></div>
+  <div class="swrap"><div class="sec" style="max-width:800px;padding-top:40px" id="priv-cont"></div></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TERMS
+══════════════════════════════════════ -->
+<div class="page" id="page-terms">
+  <div class="phdr"><div><h1>Terms &amp; Conditions</h1><div style="font-size:14px;color:var(--g600);margin-top:2px">Last updated: December 2025</div></div><button class="btn bo bsm" onclick="go('home')">← Home</button></div>
+  <div class="swrap"><div class="sec" style="max-width:800px;padding-top:40px" id="terms-cont"></div></div>
+</div>
+
+<!-- FLOATING CHAT BUTTON -->
+<button class="chatfloat" title="AI Property Assistant" onclick="go('home');setTimeout(()=>{document.getElementById('ai-in')?.scrollIntoView({behavior:'smooth'});document.getElementById('ai-in')?.focus()},350)">💬</button>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+/* ════════════════════════════════════════
+   DATA
+════════════════════════════════════════ */
+const PROPS = [
+  {id:'p1',title:'Luxury 3BHK – Gulshan-2',type:'Apartment',loc:'Gulshan, Dhaka',price:'৳1.2 Cr',pnum:12000000,beds:3,baths:3,sqft:2200,status:'buy',furn:'Fully Furnished',img:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',imgs:['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80','https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80','https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80','https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800&q=80'],agentName:'Ahmed Rahman',agentPhone:'+8801700000001',verified:true,feat:true,lux:false,views:847,amen:['Swimming Pool','Gym','24/7 Security','Parking','Generator','Lift','CCTV','Rooftop Lounge'],desc:'An exquisite 3-bedroom luxury apartment in the heart of Gulshan-2 with stunning city views. Features a modern open-plan kitchen, imported marble flooring, and smart home automation. The building offers a rooftop infinity pool, concierge service, and fully equipped fitness centre.'},
+  {id:'p2',title:'Elegant 3BHK – Banani',type:'Apartment',loc:'Banani, Dhaka',price:'৳85L',pnum:8500000,beds:3,baths:2,sqft:1800,status:'buy',furn:'Semi-Furnished',img:'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&q=80',imgs:['https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80','https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80','https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80'],agentName:'Shakila Khan',agentPhone:'+8801700000003',verified:true,feat:true,lux:false,views:612,amen:['Gym','Parking','Generator','Lift','CCTV','Rooftop Garden'],desc:'Beautifully designed apartment in prestigious Banani with premium finishes. Easy access to top restaurants, cafes, and corporate offices. Spacious balcony with stunning city views.'},
+  {id:'p3',title:'Grand Villa – Baridhara Diplomatic Zone',type:'Villa',loc:'Baridhara, Dhaka',price:'৳4.5 Cr',pnum:45000000,beds:5,baths:5,sqft:5500,status:'buy',furn:'Fully Furnished',img:'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80',imgs:['https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80','https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=800&q=80','https://images.unsplash.com/photo-1575517111839-3a3843ee7f5d?w=800&q=80'],agentName:'Minhaj Islam',agentPhone:'+8801700000002',verified:true,feat:false,lux:true,views:1230,amen:['Private Pool','Garden','3-Car Garage','Smart Home','Guest House','Home Theatre','Tennis Court'],desc:'An architectural masterpiece in Baridhara diplomatic zone. Features floor-to-ceiling windows, heated private pool, manicured Japanese garden, and chef\'s kitchen with Gaggenau appliances.'},
+  {id:'p4',title:'Modern Studio – Uttara Sector 3',type:'Apartment',loc:'Uttara, Dhaka',price:'৳18K/mo',pnum:18000,beds:1,baths:1,sqft:650,status:'rent',furn:'Fully Furnished',img:'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800&q=80',imgs:['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80','https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&q=80'],agentName:'Razia Begum',agentPhone:'+8801700000004',verified:true,feat:true,lux:false,views:320,amen:['Lift','Security','Generator','Parking'],desc:'Cozy studio apartment in Uttara Sector 3. Close to AIUB, Uttara Club, and Airport Road. Fully furnished with AC — ready to move in immediately.'},
+  {id:'p5',title:"Sea-View Penthouse – Cox's Bazar",type:'Apartment',loc:"Cox's Bazar",price:'৳65L',pnum:6500000,beds:2,baths:2,sqft:1400,status:'buy',furn:'Fully Furnished',img:'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&q=80',imgs:['https://images.unsplash.com/photo-1506059612708-99d6c258160e?w=800&q=80','https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&q=80'],agentName:'Ahmed Rahman',agentPhone:'+8801700000001',verified:true,feat:false,lux:true,views:980,amen:['Sea View','Pool','Private Balcony','Parking','Security','Gym'],desc:'Wake up to breathtaking Bay of Bengal views. Perfect vacation home or high-yield rental investment — area delivers 12–18% annual returns.'},
+  {id:'p6',title:'Family Flat – Dhanmondi 27',type:'Apartment',loc:'Dhanmondi, Dhaka',price:'৳35K/mo',pnum:35000,beds:3,baths:2,sqft:1650,status:'rent',furn:'Unfurnished',img:'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800&q=80',imgs:['https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=800&q=80'],agentName:'Shakila Khan',agentPhone:'+8801700000003',verified:false,feat:false,lux:false,views:445,amen:['Parking','Generator','Security','Lift'],desc:'Spacious 3-bedroom family apartment near Dhanmondi Lake. Walking distance from top schools and Dhanmondi 27 restaurant zone.'},
+  {id:'p7',title:'Tea Garden Villa – Sylhet',type:'Villa',loc:'Sylhet',price:'৳2.8 Cr',pnum:28000000,beds:4,baths:4,sqft:4200,status:'buy',furn:'Unfurnished',img:'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&q=80',imgs:['https://images.unsplash.com/photo-1615529328331-f8917597711f?w=800&q=80','https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80'],agentName:'Minhaj Islam',agentPhone:'+8801700000002',verified:true,feat:false,lux:true,views:760,amen:['Private Garden','Parking','Solar Power','Servant Quarters','Open Patio','BBQ Area'],desc:'A once-in-a-generation opportunity adjacent to lush Sylheti tea gardens. Perfect lifestyle retreat or premium Airbnb investment.'},
+  {id:'p8',title:'Grade-A Office – Motijheel',type:'Commercial',loc:'Motijheel, Dhaka',price:'৳55K/mo',pnum:55000,beds:0,baths:3,sqft:3500,status:'rent',furn:'Fully Furnished',img:'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',imgs:['https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&q=80','https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80'],agentName:'Razia Begum',agentPhone:'+8801700000004',verified:true,feat:false,lux:false,views:530,amen:['24/7 Access','Backup Power','Parking','High-speed Internet','Central AC','Boardroom'],desc:'Premium grade-A office space in Dhaka\'s central business district. Ideal for corporate HQ or law firms. Floor-to-ceiling glazing, executive boardroom, and dedicated server room.'},
+  {id:'p9',title:'Duplex – Gulshan Avenue',type:'Duplex',loc:'Gulshan, Dhaka',price:'৳2.1 Cr',pnum:21000000,beds:4,baths:4,sqft:3800,status:'buy',furn:'Fully Furnished',img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',imgs:['https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=800&q=80','https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80'],agentName:'Ahmed Rahman',agentPhone:'+8801700000001',verified:true,feat:false,lux:true,views:890,amen:['Private Terrace','Duplex Layout','Parking','Generator','Smart Home','CCTV'],desc:'Stunning duplex spanning two full floors in Gulshan Avenue. Private rooftop terrace with city panorama, Italian marble flooring, and European-style open kitchen.'},
+  {id:'p10',title:'Commercial Plot – Gazipur Highway',type:'Land',loc:'Gazipur, Dhaka',price:'৳45L',pnum:4500000,beds:0,baths:0,sqft:8000,status:'buy',furn:'Unfurnished',img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80',imgs:[],agentName:'Shakila Khan',agentPhone:'+8801700000003',verified:true,feat:false,lux:false,views:215,amen:['Road Frontage','Utilities Available','Clear Title Deed'],desc:'Prime commercial land on Dhaka-Mymensingh highway near Gazipur BSCIC. Ideal for factory, warehouse, or commercial development.'},
+  {id:'p11',title:'1BHK Starter Flat – Mirpur 10',type:'Apartment',loc:'Mirpur, Dhaka',price:'৳12K/mo',pnum:12000,beds:1,baths:1,sqft:700,status:'rent',furn:'Semi-Furnished',img:'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=80',imgs:['https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&q=80'],agentName:'Razia Begum',agentPhone:'+8801700000004',verified:true,feat:false,lux:false,views:280,amen:['Security','Generator','Lift'],desc:'Affordable 1-bedroom flat in Mirpur 10, close to metro station and major hospitals. Good connectivity to the rest of Dhaka.'},
+  {id:'p12',title:'Villa with Pool – Bashundhara R/A',type:'Villa',loc:'Bashundhara, Dhaka',price:'৳3.2 Cr',pnum:32000000,beds:5,baths:4,sqft:4800,status:'buy',furn:'Semi-Furnished',img:'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80',imgs:['https://images.unsplash.com/photo-1615529328331-f8917597711f?w=800&q=80','https://images.unsplash.com/photo-1584738766473-61c083514bf4?w=800&q=80'],agentName:'Minhaj Islam',agentPhone:'+8801700000002',verified:true,feat:true,lux:true,views:1100,amen:['Private Pool','Garden','4-Car Garage','Servant Quarters','Smart Home','CCTV'],desc:'Magnificent villa in Bashundhara R/A with private pool, manicured garden, and smart home system near Jamuna Future Park.'},
+];
+
+const AMENITIES_LIST = ['Swimming Pool','Gym','24/7 Security','Parking','Generator','Lift','CCTV','Rooftop Garden','Play Area','Prayer Room','Fire Safety','Intercom','Solar Panel','Jacuzzi','Servant Quarters','Central AC','High-speed Internet','Clubhouse','Tennis Court','BBQ Area'];
+
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
+let currentUser  = JSON.parse(localStorage.getItem('bl_user')  || 'null');
+let favs         = new Set(JSON.parse(localStorage.getItem('bl_favs')  || '[]'));
+let userProps    = JSON.parse(localStorage.getItem('bl_uprops') || '[]');
+let reviews      = JSON.parse(localStorage.getItem('bl_reviews')|| '[]');
+let inquiries    = JSON.parse(localStorage.getItem('bl_inqs')   || '[]');
+let visits       = JSON.parse(localStorage.getItem('bl_visits') || '[]');
+let contacts     = JSON.parse(localStorage.getItem('bl_contacts')|| '[]');
+let newsletters  = JSON.parse(localStorage.getItem('bl_nl')     || '[]');
+let curProp      = null;
+let curSort      = 'latest';
+let drafts       = JSON.parse(localStorage.getItem('bl_drafts') || '[]');
+
+function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+function saveFavs(){ save('bl_favs', [...favs]); }
+function saveUserProps(){ save('bl_uprops', userProps); }
+function saveReviews(){ save('bl_reviews', reviews); }
+function saveInquiries(){ save('bl_inqs', inquiries); }
+function saveVisits(){ save('bl_visits', visits); }
+function saveContacts(){ save('bl_contacts', contacts); }
+function saveNewsletters(){ save('bl_nl', newsletters); }
+
+function allProps(){ return [...PROPS, ...userProps]; }
+
+/* ════════════════════════════════════════
+   AUTH
+════════════════════════════════════════ */
+// Simple local auth (no server — works offline)
+let registeredUsers = JSON.parse(localStorage.getItem('bl_users') || '[]');
+
+// Default demo users
+if (!registeredUsers.length) {
+  registeredUsers = [
+    {id:'u1', name:'Rahim Ahmed', email:'rahim@test.com', password:'password123', phone:'+880 1700-000001', role:'agent'},
+    {id:'u2', name:'Admin User',  email:'admin@test.com', password:'admin123',     phone:'+880 1700-000002', role:'admin'},
+  ];
+  save('bl_users', registeredUsers);
+}
+
+function doLogin(){
+  const email = v('l-email').trim();
+  const pass  = v('l-pass');
+  if(!email||!pass){ showErr('l-err','Email and password are required'); return; }
+  const user = registeredUsers.find(u=>u.email===email && u.password===pass);
+  if(!user){ showErr('l-err','Incorrect email or password'); return; }
+  currentUser = user;
+  save('bl_user', user);
+  updateNav();
+  toast(`✅ Welcome back, ${user.name.split(' ')[0]}!`);
+  go('dashboard');
+}
+
+function doSignup(){
+  const name  = v('s-name').trim();
+  const email = v('s-email').trim();
+  const phone = v('s-phone').trim();
+  const role  = document.getElementById('s-role').value;
+  const pass  = v('s-pass');
+  if(!name||!email||!pass){ showErr('s-err','Name, email and password are required'); return; }
+  if(pass.length<8){ showErr('s-err','Password must be at least 8 characters'); return; }
+  if(registeredUsers.find(u=>u.email===email)){ showErr('s-err','This email is already registered'); return; }
+  const user = {id:'u'+Date.now(), name, email, password:pass, phone, role};
+  registeredUsers.push(user);
+  save('bl_users', registeredUsers);
+  currentUser = user;
+  save('bl_user', user);
+  updateNav();
+  toast(`🎉 Account created! Welcome to BashaLagbe, ${name.split(' ')[0]}!`);
+  go('dashboard');
+}
+
+function logout(){
+  currentUser = null;
+  localStorage.removeItem('bl_user');
+  updateNav();
+  toast('👋 Logged out successfully');
+  go('home');
+}
+
+function authGate(fn){
+  if(!currentUser){ toast('Please sign in first','err'); go('login'); return; }
+  fn();
+}
+
+function updateNav(){
+  const na = document.getElementById('nav-act');
+  if(currentUser){
+    na.innerHTML = `
+      <div class="nav-user-chip" onclick="go('dashboard')">
+        <div class="uav">${initials(currentUser.name)}</div>
+        ${currentUser.name.split(' ')[0]}
+      </div>
+      <button class="btn bp bsm" onclick="go('dashboard')">Dashboard</button>`;
+  } else {
+    na.innerHTML = `<button class="btn bo bsm" onclick="go('login')">Sign In</button><button class="btn bp bsm" onclick="go('signup')">Register Free</button>`;
+  }
+}
+
+function initials(name){ return (name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+
+/* ════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════ */
+function go(page){
+  if((page==='dashboard'||page==='upload')&&!currentUser){ toast('Please sign in first','err'); go('login'); return; }
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('page-'+page)?.classList.add('active');
+  document.getElementById('nl-'+page)?.classList.add('active');
+  window.scrollTo(0,0);
+  if(page==='home'){ renderFeat(); renderLux(); animCnt(); }
+  if(page==='listings'){ renderList(allProps()); }
+  if(page==='dashboard'){ loadDash(); }
+  if(page==='upload'){ renderAmenChk(); prefillUpload(); }
+  if(page==='faq') renderFAQ();
+  if(page==='careers') renderJobs();
+  if(page==='privacy') renderPrivacy();
+  if(page==='terms') renderTerms();
+}
+
+function setST(t){
+  ['buy','rent','comm'].forEach(x=>document.getElementById('st-'+x).classList.toggle('active',x===t));
+}
+
+function doSearch(){
+  const loc  = document.getElementById('sh-loc').value;
+  const type = document.getElementById('sh-type').value;
+  go('listings');
+  setTimeout(()=>{
+    if(loc) document.getElementById('f-loc').value=loc;
+    if(type) document.getElementById('f-type').value=type;
+    applyF();
+  },100);
+}
+
+function gotoLoc(loc){
+  go('listings');
+  setTimeout(()=>{ document.getElementById('f-loc').value=loc; applyF(); },100);
+}
+
+/* ════════════════════════════════════════
+   COUNTER ANIMATION
+════════════════════════════════════════ */
+function animCnt(){
+  [{id:'hs1',val:10247},{id:'hs2',val:52000},{id:'hs3',val:12},{id:'hs4',val:5}].forEach(t=>{
+    let c=0; const el=document.getElementById(t.id); if(!el) return;
+    const step=Math.max(1,Math.floor(t.val/70));
+    const tm=setInterval(()=>{ c=Math.min(c+step,t.val); el.innerHTML=c.toLocaleString()+(t.id==='hs4'?'':'<em>+</em>'); if(c>=t.val) clearInterval(tm); },20);
+  });
+}
+
+/* ════════════════════════════════════════
+   PROPERTY CARDS
+════════════════════════════════════════ */
+const GRADS={Apartment:'#0d2137,#1a3a5c',Villa:'#0a2818,#1a5c3a',Commercial:'#1a1a2e,#16213e',Land:'#1a2e0a,#3a5c1a',Office:'#1a1a2e,#2e3a5c',Duplex:'#1a0d2e,#3a1a5c'};
+
+function mkCard(p){
+  const isFav=favs.has(p.id);
+  const g=GRADS[p.type]||'#0d2137,#1a3a5c';
+  const d=document.createElement('div');
+  d.className='pcard';
+  d.innerHTML=`
+    <div class="ci" style="background:linear-gradient(135deg,${g})">
+      ${p.img?`<img src="${p.img}" alt="${p.title}" onerror="this.style.display='none'">`:''}
+      <div class="ci-em">${p.img?'':'🏠'}</div>
+      <div class="ci-ov"></div>
+      <div class="ci-bads">
+        <span class="badge ${p.status==='buy'?'bgreen':'bnavy'}">${p.status==='buy'?'For Sale':'For Rent'}</span>
+        ${p.verified?'<span class="badge bgold">✓ Verified</span>':''}
+        ${p.lux?'<span class="badge bgold">★ Luxury</span>':''}
+      </div>
+      <button class="cfav" onclick="favBtn(event,'${p.id}',this)">${isFav?'❤️':'🤍'}</button>
+      <div class="cprice"><div class="cpv">${p.price}</div><div class="cps">${p.type} · ${(p.sqft||0).toLocaleString()} ft²</div></div>
+    </div>
+    <div class="cbody">
+      <div class="ctitle">${p.title}</div>
+      <div class="cloc">📍 ${p.loc}</div>
+      <div class="cmeta">
+        ${p.beds>0?`<div class="cmi">🛏️ ${p.beds}</div>`:''}
+        <div class="cmi">🚿 ${p.baths}</div>
+        <div class="cmi">📐 ${(p.sqft||0).toLocaleString()}</div>
+        <div class="cmi" style="margin-left:auto;color:var(--g400)">👁️ ${p.views||0}</div>
+      </div>
+      <div class="cagt">
+        <div class="av">${initials(p.agentName||'Agent')}</div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--navy)">${p.agentName||'Agent'}</div><div style="font-size:11px;color:var(--g600)">Verified Agent</div></div>
+        <div style="margin-left:auto;font-size:12px;color:var(--green)">⭐ 4.9</div>
+      </div>
+    </div>`;
+  d.onclick=e=>{ if(!e.target.closest('.cfav')) showDetail(p.id); };
+  return d;
+}
+
+function favBtn(e,id,btn){
+  e.stopPropagation();
+  if(!currentUser){ toast('Please sign in to save properties','err'); go('login'); return; }
+  if(favs.has(id)){ favs.delete(id); btn.textContent='🤍'; toast('💔 Removed from saved'); }
+  else { favs.add(id); btn.textContent='❤️'; toast('❤️ Saved to your wishlist!'); }
+  saveFavs();
+}
+
+function renderFeat(){
+  const g=document.getElementById('home-feat'); if(!g) return; g.innerHTML='';
+  allProps().filter(p=>p.feat).slice(0,3).forEach(p=>g.appendChild(mkCard(p)));
+}
+
+function renderLux(){
+  const g=document.getElementById('home-lux'); if(!g) return; g.innerHTML='';
+  allProps().filter(p=>p.lux).slice(0,3).forEach(p=>g.appendChild(mkCard(p)));
+}
+
+function renderList(data){
+  const g=document.getElementById('list-grid'); if(!g) return; g.innerHTML='';
+  if(!data.length){
+    g.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ei">🏚️</div><div>No properties match your filters</div><button class="btn bo" style="margin-top:12px" onclick="clearF()">Clear Filters</button></div>';
+  } else { data.forEach(p=>g.appendChild(mkCard(p))); }
+  const c=document.getElementById('res-cnt'); if(c) c.textContent=`${data.length} properties found`;
+}
+
+/* ════════════════════════════════════════
+   FILTER & SORT
+════════════════════════════════════════ */
+function applyF(){
+  const st=v('f-status'); const ty=v('f-type'); const lo=v('f-loc');
+  const bd=parseInt(v('f-beds'))||0; const kw=v('f-search').toLowerCase();
+  let data=allProps().filter(p=>{
+    if(st&&p.status!==st) return false;
+    if(ty&&p.type!==ty) return false;
+    if(lo&&!p.loc.toLowerCase().includes(lo.toLowerCase())) return false;
+    if(bd&&p.beds<bd) return false;
+    if(kw&&!p.title.toLowerCase().includes(kw)&&!p.loc.toLowerCase().includes(kw)) return false;
+    return true;
+  });
+  if(curSort==='low') data=[...data].sort((a,b)=>a.pnum-b.pnum);
+  if(curSort==='high') data=[...data].sort((a,b)=>b.pnum-a.pnum);
+  if(curSort==='views') data=[...data].sort((a,b)=>b.views-a.views);
+  renderList(data);
+}
+
+function clearF(){
+  ['f-status','f-type','f-loc','f-beds'].forEach(id=>{ const e=document.getElementById(id); if(e) e.value=''; });
+  const fs=document.getElementById('f-search'); if(fs) fs.value='';
+  renderList(allProps());
+}
+
+function setSort(el,s){
+  curSort=s;
+  document.querySelectorAll('.srtbtn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active'); applyF();
+}
+
+/* ════════════════════════════════════════
+   DETAIL PAGE
+════════════════════════════════════════ */
+function showDetail(id){
+  const p=allProps().find(x=>x.id===id); if(!p) return;
+  curProp=p; p.views=(p.views||0)+1;
+  go('detail');
+
+  // Hero image
+  const hero=document.getElementById('d-hero');
+  if(p.img){ hero.style.backgroundImage=`url(${p.img})`; hero.style.backgroundSize='cover'; hero.style.backgroundPosition='center'; }
+  else { hero.style.backgroundImage=''; }
+
+  document.getElementById('d-info').innerHTML=`
+    <div class="dprice">${p.price}</div>
+    <div class="dloc">📍 ${p.loc} · ${p.type}${p.furn?' · '+p.furn:''}</div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <span class="badge ${p.status==='buy'?'bgreen':'bnavy'}">${p.status==='buy'?'For Sale':'For Rent'}</span>
+      ${p.verified?'<span class="badge bgold">✓ Verified</span>':''}
+      ${p.lux?'<span class="badge bgold">★ Luxury</span>':''}
+    </div>`;
+
+  document.getElementById('d-specs').innerHTML=`
+    <h3>🏠 ${p.title}</h3>
+    <div class="sgrid">
+      ${p.beds>0?`<div class="si"><div class="sv">🛏️ ${p.beds}</div><div class="sl2">Bedrooms</div></div>`:''}
+      <div class="si"><div class="sv">🚿 ${p.baths||0}</div><div class="sl2">Bathrooms</div></div>
+      <div class="si"><div class="sv">📐 ${(p.sqft||0).toLocaleString()}</div><div class="sl2">Sq Ft</div></div>
+      <div class="si"><div class="sv">${p.type}</div><div class="sl2">Type</div></div>
+      <div class="si"><div class="sv">${p.furn||'—'}</div><div class="sl2">Furnishing</div></div>
+      <div class="si"><div class="sv">👁️ ${p.views||0}</div><div class="sl2">Views</div></div>
+    </div>`;
+
+  document.getElementById('d-desc').innerHTML=`<h3>📋 About This Property</h3><p style="color:var(--g600);line-height:1.85;margin-top:10px;font-size:15px">${p.desc||'No description provided.'}</p>`;
+  document.getElementById('d-maploc').textContent=p.loc+', Bangladesh';
+  document.getElementById('d-gmaps-btn').onclick=()=>window.open(`https://www.google.com/maps/search/${encodeURIComponent(p.loc+' Bangladesh')}`, '_blank');
+
+  // Gallery
+  const gal=document.getElementById('d-gallery'); gal.innerHTML='';
+  const imgs=[p.img,...(p.imgs||[])].filter(Boolean);
+  if(imgs.length){
+    imgs.slice(0,5).forEach((img,i)=>{
+      const t=document.createElement('div');
+      t.className='gthumb'+(i===0?' main':'');
+      t.style.backgroundImage=`url(${img})`;
+      t.onclick=()=>openGallery(i);
+      gal.appendChild(t);
+    });
+  } else {
+    gal.innerHTML='<div class="gthumb main" style="opacity:.3;font-size:56px">🏠</div>';
+  }
+
+  // Amenities
+  const av=document.getElementById('d-amen'); av.innerHTML='';
+  (p.amen||[]).forEach(a=>{ const c=document.createElement('div'); c.className='achip'; c.textContent='✓ '+a; av.appendChild(c); });
+
+  // Nearby
+  document.getElementById('d-nearby').innerHTML=`
+    <div class="ni"><div style="font-size:22px">🕌</div><div><div style="font-size:13px;font-weight:500;color:var(--navy)">Baitul Mukarram Mosque</div><div style="font-size:12px;color:var(--g600)">0.4 km</div></div></div>
+    <div class="ni"><div style="font-size:22px">🏥</div><div><div style="font-size:13px;font-weight:500;color:var(--navy)">Square Hospital</div><div style="font-size:12px;color:var(--g600)">1.2 km</div></div></div>
+    <div class="ni"><div style="font-size:22px">🏫</div><div><div style="font-size:13px;font-weight:500;color:var(--navy)">Scholastica School</div><div style="font-size:12px;color:var(--g600)">0.8 km</div></div></div>
+    <div class="ni"><div style="font-size:22px">🛍️</div><div><div style="font-size:13px;font-weight:500;color:var(--navy)">Bashundhara City Mall</div><div style="font-size:12px;color:var(--g600)">2.1 km</div></div></div>
+    <div class="ni"><div style="font-size:22px">🚇</div><div><div style="font-size:13px;font-weight:500;color:var(--navy)">Metro Station</div><div style="font-size:12px;color:var(--g600)">0.6 km</div></div></div>
+    <div class="ni"><div style="font-size:22px">🍽️</div><div><div style="font-size:13px;font-weight:500;color:var(--navy)">Star Restaurant</div><div style="font-size:12px;color:var(--g600)">0.3 km</div></div></div>`;
+
+  // Agent
+  document.getElementById('d-agent').innerHTML=`
+    <div class="av avlg">${initials(p.agentName||'AG')}</div>
+    <div><div style="font-weight:600;color:var(--navy);font-size:15px">${p.agentName||'Agent'}</div><div style="font-size:13px;color:var(--g600)">Verified Agent</div><div style="font-size:12px;color:var(--green);margin-top:3px">⭐ 4.9 · Verified ✓</div></div>`;
+
+  // Reviews
+  renderDetailReviews(p.id);
+
+  // Similar
+  const sim=document.getElementById('sim-grid'); sim.innerHTML='';
+  allProps().filter(q=>q.id!==p.id&&q.type===p.type).slice(0,3).forEach(q=>sim.appendChild(mkCard(q)));
+  if(!sim.children.length) allProps().filter(q=>q.id!==p.id).slice(0,3).forEach(q=>sim.appendChild(mkCard(q)));
+
+  // Fav btn
+  document.getElementById('fav-btn').textContent=favs.has(p.id)?'❤️ Saved!':'❤️ Save Property';
+
+  // EMI prefill
+  if(p.status==='buy'&&p.pnum>100000){ const l=document.getElementById('emi-loan'); if(l){ l.value=Math.round(p.pnum*.7); calcEMI(); } }
+
+  // AI price
+  const aiP=document.getElementById('d-ai-price');
+  if(aiP){
+    const lo=p.pnum*.9, hi=p.pnum*1.1;
+    const fmt=n=>n>=10000000?'৳'+(n/10000000).toFixed(1)+'Cr':n>=100000?'৳'+(n/100000).toFixed(0)+'L':'৳'+n.toLocaleString();
+    aiP.innerHTML=`Based on ${p.loc} comparables, this property is <strong style="color:var(--green)">fairly priced</strong>. Market range: <strong>${fmt(lo)} – ${fmt(hi)}</strong>`;
+  }
+
+  // Review form reset
+  document.getElementById('d-rv-form').style.display='none';
+  document.getElementById('rv-btn').style.display='';
+}
+
+/* ════════════════════════════════════════
+   REVIEWS
+════════════════════════════════════════ */
+function renderDetailReviews(propId){
+  const wrap=document.getElementById('d-reviews');
+  const rv=reviews.filter(r=>r.propId===propId);
+  if(!rv.length){ wrap.innerHTML='<p style="color:var(--g600);font-size:14px">No reviews yet. Be the first to review!</p>'; return; }
+  const avg=(rv.reduce((s,r)=>s+r.rating,0)/rv.length).toFixed(1);
+  wrap.innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--g200)">
+      <div style="text-align:center"><div style="font-size:46px;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif">${avg}</div>
+      <div style="color:var(--gold);font-size:18px;letter-spacing:2px">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))}</div>
+      <div style="font-size:12px;color:var(--g600);margin-top:2px">${rv.length} review${rv.length!==1?'s':''}</div></div>
+    </div>
+    ${rv.map(r=>`<div style="padding:14px;background:var(--g100);border-radius:var(--rsm);margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div class="av" style="width:36px;height:36px;font-size:13px">${initials(r.user)}</div>
+        <div><div style="font-weight:600;font-size:13px;color:var(--navy)">${r.user}</div><div style="font-size:11px;color:var(--g600)">${r.date}</div></div>
+        <div style="margin-left:auto;color:var(--gold);font-size:13px">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+      </div>
+      <div style="font-size:13px;color:var(--g600);line-height:1.65">"${r.text}"</div>
+    </div>`).join('')}`;
+}
+
+function submitReview(){
+  if(!currentUser){ toast('Please sign in to review','err'); return; }
+  if(!curProp) return;
+  const rating=parseInt(document.getElementById('rv-rating').value);
+  const text=document.getElementById('rv-text').value.trim();
+  if(!text){ toast('Please write your review','err'); return; }
+  if(reviews.find(r=>r.propId===curProp.id&&r.uid===currentUser.id)){ toast('You already reviewed this property','err'); return; }
+  reviews.push({propId:curProp.id,uid:currentUser.id,user:currentUser.name,rating,text,date:new Date().toLocaleDateString()});
+  saveReviews();
+  document.getElementById('d-rv-form').style.display='none';
+  document.getElementById('rv-btn').style.display='';
+  document.getElementById('rv-text').value='';
+  renderDetailReviews(curProp.id);
+  toast('⭐ Review posted! Thank you.');
+}
+
+/* ════════════════════════════════════════
+   DETAIL BUTTONS
+════════════════════════════════════════ */
+function callAgent(){
+  if(!curProp) return;
+  const ph=curProp.agentPhone||'+8801700000001';
+  toast(`📞 Calling ${curProp.agentName} at ${ph.replace(/(\d{4})(\d{4})(\d+)/,'$1-$2-$3')}`);
+  setTimeout(()=>window.location.href=`tel:${ph}`, 800);
+}
+
+function waAgent(){
+  if(!curProp) return;
+  const ph=(curProp.agentPhone||'8801700000001').replace(/[^0-9]/g,'');
+  const msg=encodeURIComponent(`Hi, I'm interested in: ${curProp.title} listed on BashaLagbe. Is it still available?`);
+  window.open(`https://wa.me/${ph}?text=${msg}`,'_blank');
+  toast('💬 Opening WhatsApp...');
+}
+
+function toggleFav(){
+  if(!currentUser){ toast('Please sign in to save properties','err'); go('login'); return; }
+  if(!curProp) return;
+  if(favs.has(curProp.id)){ favs.delete(curProp.id); document.getElementById('fav-btn').textContent='❤️ Save Property'; toast('💔 Removed from saved'); }
+  else { favs.add(curProp.id); document.getElementById('fav-btn').textContent='❤️ Saved!'; toast('❤️ Saved to wishlist!'); }
+  saveFavs();
+}
+
+function openInqModal(){
+  showModal(`
+    <button class="mcl" onclick="closeModal()">✕</button>
+    <h2>✉️ Send Inquiry</h2>
+    <div class="msub">For: ${curProp?.title||'Property'}</div>
+    <div id="inq-err" class="err-msg" style="display:none;margin-bottom:10px"></div>
+    <div class="igp"><label>Your Name *</label><input id="inq-name" value="${currentUser?.name||''}" placeholder="Rahim Ahmed"></div>
+    <div class="igp"><label>Email *</label><input id="inq-email" type="email" value="${currentUser?.email||''}" placeholder="you@email.com"></div>
+    <div class="igp"><label>Phone</label><input id="inq-phone" value="${currentUser?.phone||''}" placeholder="+880 1700-000000"></div>
+    <div class="igp"><label>Message *</label><textarea id="inq-msg" style="border:1.5px solid var(--g200);border-radius:var(--rsm);padding:10px 14px;width:100%;min-height:100px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:vertical">Hi, I'm interested in this property. Is it still available? Please provide more details.</textarea></div>
+    <div class="gap10">
+      <button class="btn bp" onclick="submitInq()">Send Inquiry</button>
+      <button class="btn bo" onclick="closeModal()">Cancel</button>
+    </div>`);
+}
+
+function submitInq(){
+  const name=v('inq-name').trim(), email=v('inq-email').trim(), msg=v('inq-msg').trim();
+  if(!name||!email||!msg){ showErr('inq-err','Name, email and message are required'); return; }
+  inquiries.push({id:'i'+Date.now(),propId:curProp.id,propTitle:curProp.title,agentName:curProp.agentName,name,email,phone:v('inq-phone'),message:msg,read:false,replied:false,date:new Date().toLocaleDateString()});
+  saveInquiries(); closeModal();
+  toast('✅ Inquiry sent! The agent will contact you within 24 hours.');
+}
+
+function openVisitModal(){
+  showModal(`
+    <button class="mcl" onclick="closeModal()">✕</button>
+    <h2>📅 Schedule a Visit</h2>
+    <div class="msub">For: ${curProp?.title||'Property'}</div>
+    <div id="vis-err" class="err-msg" style="display:none;margin-bottom:10px"></div>
+    <div class="igp"><label>Your Name *</label><input id="v-name" value="${currentUser?.name||''}" placeholder="Rahim Ahmed"></div>
+    <div class="igp"><label>Phone Number *</label><input id="v-phone" value="${currentUser?.phone||''}" placeholder="+880 1700-000000"></div>
+    <div class="igp"><label>Email</label><input id="v-email" type="email" value="${currentUser?.email||''}" placeholder="you@email.com"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="igp"><label>Date *</label><input id="v-date" type="date" min="${new Date().toISOString().split('T')[0]}"></div>
+      <div class="igp"><label>Time *</label><select id="v-time" style="border:1.5px solid var(--g200);border-radius:var(--rsm);padding:11px 14px;font-size:14px;outline:none;width:100%;font-family:'DM Sans',sans-serif;background:#fff"><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></div>
+    </div>
+    <div class="igp"><label>Notes (optional)</label><textarea id="v-note" style="border:1.5px solid var(--g200);border-radius:var(--rsm);padding:10px 14px;width:100%;min-height:70px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:vertical" placeholder="Any special requirements?"></textarea></div>
+    <div class="gap10">
+      <button class="btn bp" onclick="submitVisit()">📅 Confirm Visit</button>
+      <button class="btn bo" onclick="closeModal()">Cancel</button>
+    </div>`);
+}
+
+function submitVisit(){
+  const name=v('v-name').trim(), phone=v('v-phone').trim(), date=v('v-date'), time=document.getElementById('v-time').value;
+  if(!name||!phone||!date||!time){ showErr('vis-err','Name, phone, date and time are required'); return; }
+  visits.push({id:'vs'+Date.now(),propId:curProp.id,propTitle:curProp.title,agentName:curProp.agentName,name,phone,email:v('v-email'),date,time,note:v('v-note'),status:'pending',createdAt:new Date().toLocaleDateString()});
+  saveVisits(); closeModal();
+  toast(`📅 Visit scheduled for ${date} at ${time}! Agent will confirm within 2 hours.`);
+}
+
+/* ════════════════════════════════════════
+   EMI CALCULATOR
+════════════════════════════════════════ */
+function calcEMI(){
+  const loan=parseFloat(document.getElementById('emi-loan')?.value)||0;
+  const yrs=parseFloat(document.getElementById('emi-yrs')?.value)||20;
+  const rate=(parseFloat(document.getElementById('emi-rate')?.value)||9)/100/12;
+  const n=yrs*12;
+  const emi=loan>0&&rate>0?(loan*rate*Math.pow(1+rate,n))/(Math.pow(1+rate,n)-1):0;
+  const r=document.getElementById('emi-res');
+  if(r) r.innerHTML=`<div class="emiamt">৳${Math.round(emi).toLocaleString()}</div><div style="font-size:12px;color:var(--g600);margin-top:2px">Monthly EMI · ${document.getElementById('emi-rate')?.value||9}% p.a. for ${yrs} yrs</div>`;
+}
+
+/* ════════════════════════════════════════
+   LIGHTBOX GALLERY
+════════════════════════════════════════ */
+function openGallery(startIdx){
+  if(!curProp) return;
+  const imgs=[curProp.img,...(curProp.imgs||[])].filter(Boolean);
+  if(!imgs.length) return;
+  let cur=startIdx||0;
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px';
+  const render=()=>{
+    ov.innerHTML=`
+      <div style="position:absolute;top:16px;right:20px;display:flex;gap:12px;align-items:center">
+        <span style="color:rgba(255,255,255,.5);font-size:14px">${cur+1} / ${imgs.length}</span>
+        <button onclick="document.querySelector('.lb-ov').remove()" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;width:40px;height:40px;border-radius:50%;cursor:pointer">✕</button>
+      </div>
+      ${cur>0?`<button id="lb-prev" style="position:absolute;left:20px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:28px;width:52px;height:52px;border-radius:50%;cursor:pointer">‹</button>`:''}
+      <img src="${imgs[cur]}" style="max-width:90vw;max-height:75vh;object-fit:contain;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+      ${cur<imgs.length-1?`<button id="lb-next" style="position:absolute;right:20px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:28px;width:52px;height:52px;border-radius:50%;cursor:pointer">›</button>`:''}
+      <div style="display:flex;gap:8px;margin-top:16px;overflow-x:auto;max-width:90vw;padding:4px">
+        ${imgs.map((img,i)=>`<img src="${img}" data-i="${i}" style="width:70px;height:52px;object-fit:cover;border-radius:6px;cursor:pointer;opacity:${i===cur?1:.45};border:${i===cur?'2px solid #22c97a':'2px solid transparent'};flex-shrink:0">`).join('')}
+      </div>
+      <div style="margin-top:12px;font-size:13px;color:rgba(255,255,255,.4)">${curProp.title}</div>`;
+    ov.className='lb-ov';
+    ov.querySelector('#lb-prev')?.addEventListener('click',()=>{cur--;render();});
+    ov.querySelector('#lb-next')?.addEventListener('click',()=>{cur++;render();});
+    ov.querySelectorAll('img[data-i]').forEach(img=>img.addEventListener('click',()=>{cur=parseInt(img.dataset.i);render();}));
+  };
+  ov.onclick=e=>{if(e.target===ov) ov.remove();};
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'&&cur>0){cur--;render();}if(e.key==='ArrowRight'&&cur<imgs.length-1){cur++;render();}if(e.key==='Escape') ov.remove();},{once:false});
+  render();
+  document.body.appendChild(ov);
+}
+
+/* ════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════ */
+function loadDash(){
+  if(!currentUser) return;
+  document.getElementById('d-avat').textContent=initials(currentUser.name);
+  document.getElementById('d-uname').textContent=currentUser.name;
+  document.getElementById('d-urole').textContent=currentUser.role==='admin'?'Administrator':currentUser.role==='agent'?'Agent / Owner':'Member';
+  if(currentUser.role==='admin') document.getElementById('admin-link').style.display='';
+  renderDash('overview');
+}
+
+function renderDash(tab){
+  const c=document.getElementById('dash-cont'); if(!c) return;
+  const myProps=allProps().filter(p=>p.addedBy===currentUser.id);
+  const myInqs=inquiries.filter(i=>i.agentName===currentUser.name||currentUser.role==='admin');
+  const myVisits=visits.filter(v=>v.agentName===currentUser.name||currentUser.role==='admin');
+  const savedProps=allProps().filter(p=>favs.has(p.id));
+
+  if(tab==='overview'){
+    c.innerHTML=`
+      <div class="dhdr"><h2>Welcome back, ${currentUser.name.split(' ')[0]} 👋</h2><p>Here's a snapshot of your activity — ${new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</p></div>
+      <div class="srow">
+        <div class="scard"><div class="sic">🏠</div><div class="sval">${myProps.length}</div><div class="slb">My Listings</div></div>
+        <div class="scard"><div class="sic">❤️</div><div class="sval">${savedProps.length}</div><div class="slb">Saved Properties</div></div>
+        <div class="scard"><div class="sic">📬</div><div class="sval">${myInqs.length}</div><div class="slb">Total Inquiries</div>${myInqs.filter(i=>!i.read).length?`<div class="schg">${myInqs.filter(i=>!i.read).length} unread</div>`:''}</div>
+        <div class="scard"><div class="sic">📅</div><div class="sval">${myVisits.filter(v=>v.status==='pending').length}</div><div class="slb">Pending Visits</div></div>
+      </div>
+      <div class="tcard">
+        <div class="thdr"><h3>Quick Actions</h3></div>
+        <div style="padding:20px;display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn bp" onclick="go('upload')">➕ Add New Listing</button>
+          <button class="btn bo" onclick="dTab('inquiries',null)">📬 View Inquiries</button>
+          <button class="btn bo" onclick="dTab('saved',null)">❤️ Saved Properties</button>
+          <button class="btn bo" onclick="dTab('visits',null)">📅 Scheduled Visits</button>
+          <button class="btn bo" onclick="go('listings')">🔍 Browse All Properties</button>
+        </div>
+      </div>
+      ${myInqs.filter(i=>!i.read).length?`
+      <div class="tcard">
+        <div class="thdr"><h3>🔴 Unread Inquiries</h3></div>
+        ${myInqs.filter(i=>!i.read).slice(0,3).map(i=>`
+        <div style="padding:16px 20px;border-bottom:1px solid var(--g100);border-left:3px solid var(--green)">
+          <div style="font-weight:600;color:var(--navy);margin-bottom:4px">${i.name} <span style="font-size:12px;color:var(--g400)">· ${i.date}</span></div>
+          <div style="font-size:12px;color:var(--g400);margin-bottom:6px">Re: ${i.propTitle}</div>
+          <div style="font-size:14px;color:var(--navy);font-style:italic">"${i.message.slice(0,80)}${i.message.length>80?'...':''}"</div>
+        </div>`).join('')}
+      </div>`:''}`;
+  }
+
+  else if(tab==='saved'){
+    c.innerHTML=`<div class="dhdr"><h2>Saved Properties</h2><p>${savedProps.length} in your wishlist</p></div>`;
+    if(savedProps.length){
+      const g=document.createElement('div'); g.className='pgrid';
+      savedProps.forEach(p=>g.appendChild(mkCard(p))); c.appendChild(g);
+    } else { c.innerHTML+=`<div class="empty"><div class="ei">🤍</div><div>No saved properties yet.<br>Browse listings and click ❤️ to save.</div><button class="btn bp" style="margin-top:16px" onclick="go('listings')">Browse Properties</button></div>`; }
+  }
+
+  else if(tab==='mylist'){
+    c.innerHTML=`<div class="dhdr" style="display:flex;justify-content:space-between;align-items:flex-start"><div><h2>My Listings</h2><p>${myProps.length} total listings</p></div><button class="btn bp" onclick="go('upload')">+ Add New</button></div>`;
+    if(myProps.length){
+      const tbl=document.createElement('div'); tbl.className='tcard';
+      tbl.innerHTML=`<div class="thdr"><h3>All Your Properties</h3></div><table><thead><tr><th>Title</th><th>Price</th><th>Status</th><th>Views</th><th>Actions</th></tr></thead><tbody>
+        ${myProps.map(p=>`<tr>
+          <td><strong>${p.title}</strong><br><small style="color:var(--g400)">${p.type} · ${p.loc}</small></td>
+          <td>${p.price}</td>
+          <td><span class="ts bsuccess">Active</span></td>
+          <td>${p.views||0}</td>
+          <td><div class="gap10">
+            <button class="btn bo bsm" onclick="showDetail('${p.id}')">View</button>
+            <button class="btn br bsm" onclick="deleteProp('${p.id}')">Delete</button>
+          </div></td>
+        </tr>`).join('')}
+      </tbody></table>`;
+      c.appendChild(tbl);
+    } else { c.innerHTML+=`<div class="empty"><div class="ei">🏚️</div><div>No listings yet</div><button class="btn bp" style="margin-top:16px" onclick="go('upload')">Add Your First Listing</button></div>`; }
+  }
+
+  else if(tab==='inquiries'){
+    c.innerHTML=`<div class="dhdr"><h2>Inquiries</h2><p>${myInqs.length} total · ${myInqs.filter(i=>!i.read).length} unread</p></div>`;
+    if(myInqs.length){
+      myInqs.forEach(i=>{
+        const el=document.createElement('div');
+        el.style.cssText=`background:#fff;border-radius:var(--rmd);padding:18px 20px;border:1px solid var(--g200);box-shadow:var(--ss);margin-bottom:14px;${!i.read?'border-left:3px solid var(--green)':''}`;
+        el.innerHTML=`
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="font-weight:600;color:var(--navy)">${i.name} ${!i.read?'<span class="badge bgreen" style="font-size:10px">New</span>':''}</span>
+            <span style="font-size:12px;color:var(--g400)">${i.date}</span>
+          </div>
+          <div style="font-size:12px;color:var(--g400);margin-bottom:8px">📌 ${i.propTitle} · 📞 ${i.phone||'—'} · ✉️ ${i.email||'—'}</div>
+          <div style="font-size:14px;color:var(--navy);font-style:italic;margin-bottom:12px">"${i.message}"</div>
+          ${i.replied?`<div style="background:var(--gpale);border-radius:var(--rsm);padding:10px;font-size:13px;color:var(--g600);margin-bottom:10px"><strong>Your reply:</strong> ${i.reply}</div>`:''}
+          <div class="gap10">
+            ${!i.replied?`<button class="btn bp bsm" onclick="openReplyModal('${i.id}','${i.name}')">Reply</button>`:''}
+            <button class="btn bw bsm" onclick="window.open('https://wa.me/${(i.phone||'8801700000000').replace(/[^0-9]/g,'')}','_blank')">WhatsApp</button>
+            <button class="btn bo bsm" onclick="window.location.href='mailto:${i.email}'">Email</button>
+            ${!i.read?`<button class="btn bo bsm" onclick="markRead('${i.id}',this)">Mark Read</button>`:''}
+          </div>`;
+        c.appendChild(el);
+      });
+    } else { c.innerHTML+=`<div class="empty"><div class="ei">📭</div><div>No inquiries yet</div></div>`; }
+  }
+
+  else if(tab==='visits'){
+    c.innerHTML=`<div class="dhdr"><h2>Scheduled Visits</h2><p>${myVisits.length} total visits</p></div>`;
+    if(myVisits.length){
+      const tbl=document.createElement('div'); tbl.className='tcard';
+      tbl.innerHTML=`<div class="thdr"><h3>All Scheduled Visits</h3></div><table><thead><tr><th>Client</th><th>Property</th><th>Date &amp; Time</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+        ${myVisits.map(vis=>`<tr>
+          <td><strong>${vis.name}</strong><br><small>${vis.phone}</small></td>
+          <td>${vis.propTitle}</td>
+          <td>${vis.date} at ${vis.time}</td>
+          <td><span class="ts ${vis.status==='confirmed'?'bsuccess':vis.status==='cancelled'?'bred':'bwarn'}">${vis.status}</span></td>
+          <td><div class="gap10">
+            ${vis.status==='pending'?`
+              <button class="btn bsm" style="background:#dcfce7;color:#166534;border:none" onclick="confirmVisit('${vis.id}')">✓ Confirm</button>
+              <button class="btn br bsm" onclick="cancelVisit('${vis.id}')">✗ Cancel</button>
+            `:'<span style="font-size:12px;color:var(--g400)">Done</span>'}
+          </div></td>
+        </tr>`).join('')}
+      </tbody></table>`;
+      c.appendChild(tbl);
+    } else { c.innerHTML+=`<div class="empty"><div class="ei">📅</div><div>No visits scheduled</div></div>`; }
+  }
+
+  else if(tab==='analytics'){
+    const totalViews=myProps.reduce((s,p)=>s+p.views,0);
+    const maxV=Math.max(...myProps.map(p=>p.views),1);
+    c.innerHTML=`
+      <div class="dhdr"><h2>Analytics</h2><p>Track your property performance</p></div>
+      <div class="srow">
+        <div class="scard"><div class="sval">${totalViews.toLocaleString()}</div><div class="slb">Total Views</div></div>
+        <div class="scard"><div class="sval">${myProps.length}</div><div class="slb">Active Listings</div></div>
+        <div class="scard"><div class="sval">${myInqs.length}</div><div class="slb">Inquiries Received</div></div>
+        <div class="scard"><div class="sval">${myVisits.filter(v=>v.status==='confirmed').length}</div><div class="slb">Visits Confirmed</div></div>
+      </div>
+      ${myProps.length?`
+      <div class="tcard">
+        <div class="thdr"><h3>Views by Property</h3></div>
+        <div style="padding:20px">
+          ${myProps.map(p=>`<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="font-size:13px;color:var(--navy);width:200px;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${p.title}</div>
+            <div style="flex:1;height:8px;background:var(--g100);border-radius:4px;overflow:hidden"><div style="height:100%;background:var(--green);border-radius:4px;width:${Math.round(p.views/maxV*100)}%"></div></div>
+            <div style="font-size:13px;color:var(--g600);width:40px;text-align:right">${p.views||0}</div>
+          </div>`).join('')}
+        </div>
+      </div>`:`<div class="empty"><div class="ei">📈</div><div>No listings to analyze yet</div><button class="btn bp" style="margin-top:16px" onclick="go('upload')">Add Your First Listing</button></div>`}`;
+  }
+
+  else if(tab==='messages'){
+    c.innerHTML=`
+      <div class="dhdr"><h2>Messages</h2><p>Direct communication with clients and agents</p></div>
+      <div style="background:#fff;border-radius:var(--rmd);border:1px solid var(--g200);box-shadow:var(--ss);overflow:hidden;display:grid;grid-template-columns:260px 1fr;height:500px">
+        <div style="border-right:1px solid var(--g200);overflow-y:auto">
+          <div style="padding:12px 16px;font-size:11px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--g200)">Recent Conversations</div>
+          ${myInqs.slice(0,5).map((i,idx)=>`<div style="padding:14px 16px;border-bottom:1px solid var(--g100);cursor:pointer;background:${idx===0?'var(--g100)':''};" onclick="this.closest('[style*=grid]').querySelector('[data-msgarea]').innerHTML='<div style=padding:20px><div style=font-weight:600;color:var(--navy);margin-bottom:8px>${i.name}</div><div style=background:var(--g100);border-radius:var(--rsm);padding:12px;font-size:14px>${i.message}</div></div>'">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="av" style="width:38px;height:38px;font-size:13px;flex-shrink:0">${initials(i.name)}</div>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:var(--navy)">${i.name}</div><div style="font-size:12px;color:var(--g600);overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${i.message.slice(0,30)}...</div></div>
+              ${!i.read?'<div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div>':''}
+            </div>
+          </div>`).join('')}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--g400);font-size:14px;padding:40px;text-align:center" data-msgarea>
+          <div style="font-size:48px;margin-bottom:12px">💬</div>
+          <div>Select a conversation to view</div>
+          <div style="font-size:12px;margin-top:6px;color:var(--g300)">Messages are stored locally in your browser</div>
+        </div>
+      </div>`;
+  }
+
+  else if(tab==='profile'){
+    c.innerHTML=`
+      <div class="dhdr"><h2>My Profile</h2></div>
+      <div class="uform" style="max-width:600px">
+        <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--g200)">
+          <div class="av avxl">${initials(currentUser.name)}</div>
+          <div>
+            <div style="font-size:20px;font-weight:600;color:var(--navy)">${currentUser.name}</div>
+            <div style="font-size:14px;color:var(--g600)">${currentUser.role} Account</div>
+            <div class="gap10" style="margin-top:10px">
+              <span class="badge bsuccess">✓ Email Verified</span>
+              ${currentUser.phone?'<span class="badge bsuccess">✓ Phone Added</span>':''}
+            </div>
+          </div>
+        </div>
+        <div id="prof-msg" style="display:none;background:var(--gpale);border-radius:var(--rsm);padding:10px;font-size:13px;color:var(--green);margin-bottom:14px;border:1px solid rgba(26,138,90,.2)"></div>
+        <div class="fgrid">
+          <div class="fgp"><label class="flbl">Full Name</label><input class="fin" id="p-name" value="${currentUser.name}"></div>
+          <div class="fgp"><label class="flbl">Phone</label><input class="fin" id="p-phone" value="${currentUser.phone||''}"></div>
+          <div class="fgp s2"><label class="flbl">Email Address</label><input class="fin" value="${currentUser.email}" disabled style="background:var(--g100);color:var(--g600)"></div>
+          <div class="fgp"><label class="flbl">Account Type</label><input class="fin" value="${currentUser.role}" disabled style="background:var(--g100);color:var(--g600);text-transform:capitalize"></div>
+          <div class="fgp"><label class="flbl">New Password</label><input class="fin" id="p-pass" type="password" placeholder="Leave blank to keep current"></div>
+        </div>
+        <div class="rend">
+          <button class="btn bo" onclick="go('home')">Back to Site</button>
+          <button class="btn bp blg" onclick="saveProfile()">Save Changes</button>
+        </div>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--g200)">
+          <h4 style="font-size:14px;font-weight:600;color:var(--red);margin-bottom:10px">Danger Zone</h4>
+          <button class="btn br" onclick="logout()">🚪 Logout from All Devices</button>
+        </div>
+      </div>`;
+  }
+
+  else if(tab==='admin'){
+    if(currentUser.role!=='admin'){ c.innerHTML='<div class="empty"><div class="ei">🚫</div><div>Admin access only</div></div>'; return; }
+    const totalInqs=inquiries.length;
+    const totalVis=visits.length;
+    const allU=registeredUsers;
+    c.innerHTML=`
+      <div class="dhdr"><h2>🛡️ Admin Panel</h2><p>Platform management and oversight</p></div>
+      <div class="srow">
+        <div class="scard"><div class="sval">${allProps().length}</div><div class="slb">Total Properties</div></div>
+        <div class="scard"><div class="sval">${allU.length}</div><div class="slb">Registered Users</div></div>
+        <div class="scard"><div class="sval">${totalInqs}</div><div class="slb">Total Inquiries</div></div>
+        <div class="scard"><div class="sval">${totalVis}</div><div class="slb">Total Visits</div></div>
+      </div>
+      <div class="tcard" style="margin-bottom:20px">
+        <div class="thdr"><h3>All Users</h3><button class="btn bo bsm" onclick="exportUsers()">📤 Export CSV</button></div>
+        <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Phone</th><th>Actions</th></tr></thead><tbody>
+          ${allU.map(u=>`<tr>
+            <td><strong>${u.name}</strong></td>
+            <td>${u.email}</td>
+            <td><span class="ts ${u.role==='admin'?'bred':u.role==='agent'?'bgold':'bsuccess'}">${u.role}</span></td>
+            <td>${u.phone||'—'}</td>
+            <td><button class="btn bo bsm" onclick="toast('👤 ${u.name} — Role: ${u.role}')">View</button></td>
+          </tr>`).join('')}
+        </tbody></table>
+      </div>
+      <div class="tcard" style="margin-bottom:20px">
+        <div class="thdr"><h3>All Properties (${allProps().length})</h3></div>
+        <table><thead><tr><th>Title</th><th>Location</th><th>Price</th><th>Status</th><th>Views</th></tr></thead><tbody>
+          ${allProps().slice(0,10).map(p=>`<tr>
+            <td><strong>${p.title}</strong></td>
+            <td>${p.loc}</td>
+            <td>${p.price}</td>
+            <td><span class="ts bsuccess">Active</span></td>
+            <td>${p.views||0}</td>
+          </tr>`).join('')}
+        </tbody></table>
+      </div>
+      <div class="tcard">
+        <div class="thdr"><h3>Contact Messages (${contacts.length})</h3></div>
+        ${contacts.length?`<table><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Date</th></tr></thead><tbody>
+          ${contacts.map(ct=>`<tr><td>${ct.name}</td><td>${ct.email}</td><td>${ct.subject||'General'}</td><td>${ct.date}</td></tr>`).join('')}
+        </tbody></table>`:'<div style="padding:20px;color:var(--g600)">No contact messages yet</div>'}
+      </div>`;
+  }
+}
+
+function dTab(tab,el){
+  document.querySelectorAll('.dni').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderDash(tab);
+}
+
+/* ════════════════════════════════════════
+   DASHBOARD ACTIONS
+════════════════════════════════════════ */
+function markRead(id,btn){
+  const inq=inquiries.find(i=>i.id===id);
+  if(inq){ inq.read=true; saveInquiries(); btn.remove(); toast('✅ Marked as read'); }
+}
+
+function openReplyModal(id,name){
+  showModal(`
+    <button class="mcl" onclick="closeModal()">✕</button>
+    <h2>Reply to ${name}</h2>
+    <div id="rp-err" class="err-msg" style="display:none;margin-bottom:10px"></div>
+    <div class="igp"><label>Your Reply</label><textarea id="rp-msg" style="border:1.5px solid var(--g200);border-radius:var(--rsm);padding:10px 14px;width:100%;min-height:100px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:vertical" placeholder="Hi, thank you for your interest..."></textarea></div>
+    <div class="gap10">
+      <button class="btn bp" onclick="sendReply('${id}')">Send Reply</button>
+      <button class="btn bo" onclick="closeModal()">Cancel</button>
+    </div>`);
+}
+
+function sendReply(id){
+  const msg=v('rp-msg').trim();
+  if(!msg){ showErr('rp-err','Please write a reply'); return; }
+  const inq=inquiries.find(i=>i.id===id);
+  if(inq){ inq.replied=true; inq.reply=msg; inq.read=true; saveInquiries(); closeModal(); toast('✅ Reply saved!'); renderDash('inquiries'); }
+}
+
+function confirmVisit(id){
+  const vis=visits.find(v=>v.id===id);
+  if(vis){ vis.status='confirmed'; saveVisits(); toast('✅ Visit confirmed!'); renderDash('visits'); }
+}
+
+function cancelVisit(id){
+  const vis=visits.find(v=>v.id===id);
+  if(vis){ vis.status='cancelled'; saveVisits(); toast('Visit cancelled'); renderDash('visits'); }
+}
+
+function deleteProp(id){
+  if(!confirm('Delete this listing? This cannot be undone.')) return;
+  userProps=userProps.filter(p=>p.id!==id); saveUserProps();
+  toast('🗑️ Listing deleted'); renderDash('mylist');
+}
+
+function saveProfile(){
+  const name=v('p-name').trim(), phone=v('p-phone').trim(), pass=v('p-pass');
+  if(!name){ toast('Name is required','err'); return; }
+  currentUser.name=name; currentUser.phone=phone;
+  if(pass.length>=8){ currentUser.password=pass; }
+  const idx=registeredUsers.findIndex(u=>u.id===currentUser.id);
+  if(idx>=0){ registeredUsers[idx]=currentUser; save('bl_users',registeredUsers); }
+  save('bl_user',currentUser); updateNav();
+  const msg=document.getElementById('prof-msg');
+  if(msg){ msg.style.display='block'; msg.textContent='✅ Profile updated successfully!'; setTimeout(()=>msg.style.display='none',3000); }
+}
+
+function exportUsers(){
+  const rows=['Name,Email,Role,Phone',...registeredUsers.map(u=>`"${u.name}","${u.email}","${u.role}","${u.phone||''}"`).join('\n')];
+  const blob=new Blob([rows.join('\n')],{type:'text/csv'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='bashalagbe_users.csv'; a.click();
+  toast('📤 Users exported as CSV!');
+}
+
+/* ════════════════════════════════════════
+   PROPERTY UPLOAD (LIST PROPERTY)
+════════════════════════════════════════ */
+const AMEN_LIST_ALL=['Swimming Pool','Gym','24/7 Security','Parking','Generator','Lift','CCTV','Rooftop Garden','Play Area','Prayer Room','Fire Safety','Intercom','Solar Panel','Jacuzzi','Servant Quarters','Central AC','High-speed Internet','Clubhouse','Tennis Court','BBQ Area','Guest Parking','DEWA Connection','Backup Water Supply'];
+
+function renderAmenChk(){
+  const c=document.getElementById('amen-chk'); if(!c||c.children.length) return;
+  AMEN_LIST_ALL.forEach(a=>{
+    const lbl=document.createElement('label');
+    lbl.style.cssText='display:flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px solid var(--g200);border-radius:100px;font-size:13px;cursor:pointer;transition:all .2s;color:var(--g600);user-select:none';
+    const inp=document.createElement('input'); inp.type='checkbox'; inp.value=a; inp.style.accentColor='var(--green)';
+    inp.onchange=()=>{ lbl.style.borderColor=inp.checked?'var(--green)':'var(--g200)'; lbl.style.color=inp.checked?'var(--green)':'var(--g600)'; lbl.style.background=inp.checked?'var(--gpale)':''; };
+    lbl.appendChild(inp); lbl.appendChild(document.createTextNode(a)); c.appendChild(lbl);
+  });
+}
+
+function prefillUpload(){
+  if(currentUser){ const n=document.getElementById('u-aname'); if(n&&!n.value) n.value=currentUser.name; const ph=document.getElementById('u-aphone'); if(ph&&!ph.value) ph.value=currentUser.phone||''; const em=document.getElementById('u-aemail'); if(em&&!em.value) em.value=currentUser.email||''; }
+}
+
+function saveDraft(){
+  const title=v('u-title').trim();
+  if(!title){ toast('Add a title before saving draft','err'); return; }
+  drafts.push({title,saved:new Date().toLocaleDateString()});
+  save('bl_drafts',drafts);
+  toast('💾 Draft saved! You can continue later.');
+}
+
+function submitProp(){
+  if(!currentUser){ toast('Please sign in first','err'); go('login'); return; }
+  const title=v('u-title').trim(), loc=v('u-loc').trim(), price=v('u-price'), desc=v('u-desc').trim();
+  if(!title||!loc||!price||!desc){ showErr('u-err','Title, location, price and description are required'); return; }
+
+  const type=document.getElementById('u-type').value;
+  const status=document.getElementById('u-status').value;
+  const beds=parseInt(document.getElementById('u-beds').value)||0;
+  const baths=parseInt(document.getElementById('u-baths').value)||0;
+  const sqft=parseInt(v('u-sqft'))||0;
+  const furn=document.getElementById('u-furn').value;
+  const pnum=parseFloat(price)||0;
+  const amen=Array.from(document.querySelectorAll('#amen-chk input:checked')).map(i=>i.value);
+  const imgUrl=v('u-img').trim();
+  const extraImgRaw=v('u-imgs').trim();
+  const extraImgs=extraImgRaw?extraImgRaw.split('\n').map(s=>s.trim()).filter(Boolean):[];
+
+  // Format price label
+  let priceLabel;
+  if(status==='rent') priceLabel=`৳${pnum.toLocaleString()}/mo`;
+  else if(pnum>=10000000) priceLabel=`৳${(pnum/10000000).toFixed(1).replace('.0','')} Cr`;
+  else if(pnum>=100000) priceLabel=`৳${(pnum/100000).toFixed(0)}L`;
+  else priceLabel=`৳${pnum.toLocaleString()}`;
+
+  const newProp={
+    id:'up'+Date.now(),title,type,loc,price:priceLabel,pnum,beds,baths,sqft,status,furn,desc,amen,
+    img:imgUrl||'',imgs:extraImgs,
+    agentName:v('u-aname')||currentUser.name,
+    agentPhone:v('u-aphone')||currentUser.phone||'+8801700000000',
+    agentEmail:v('u-aemail')||currentUser.email,
+    agentWA:v('u-awa'),
+    verified:false,feat:false,lux:false,views:0,
+    addedBy:currentUser.id,
+    createdAt:new Date().toISOString()
+  };
+  userProps.push(newProp);
+  saveUserProps();
+
+  // Reset form
+  ['u-title','u-loc','u-price','u-sqft','u-desc','u-img','u-imgs','u-floor'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.querySelectorAll('#amen-chk input:checked').forEach(inp=>{inp.checked=false;inp.closest('label').style.borderColor='var(--g200)';inp.closest('label').style.color='var(--g600)';inp.closest('label').style.background='';});
+  document.getElementById('u-err').style.display='none';
+
+  toast('✅ Listing submitted! It\'s now live on BashaLagbe.');
+  go('dashboard');
+  setTimeout(()=>dTab('mylist',null),400);
+}
+
+/* ════════════════════════════════════════
+   NEWSLETTER
+════════════════════════════════════════ */
+function subNewsletter(){
+  const email=v('nl-email').trim();
+  if(!email||!email.includes('@')){ toast('Please enter a valid email','err'); return; }
+  if(newsletters.includes(email)){ toast('You\'re already subscribed! 🎉'); return; }
+  newsletters.push(email); saveNewsletters();
+  document.getElementById('nl-email').value='';
+  toast('✅ Subscribed! You\'ll get the latest listings in your inbox.');
+}
+
+/* ════════════════════════════════════════
+   CONTACT FORM
+════════════════════════════════════════ */
+function submitContact(){
+  const name=v('c-name').trim(), email=v('c-email').trim(), msg=v('c-msg').trim();
+  if(!name||!email||!msg){ showErr('c-err','Name, email and message are required'); return; }
+  const btn=document.getElementById('c-btn');
+  btn.textContent='Sending...'; btn.disabled=true;
+  setTimeout(()=>{
+    contacts.push({id:'ct'+Date.now(),name,email,phone:v('c-phone'),subject:document.getElementById('c-subj').value,message:msg,date:new Date().toLocaleDateString()});
+    saveContacts();
+    ['c-name','c-email','c-phone','c-msg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    document.getElementById('c-err').style.display='none';
+    btn.textContent='Send Message'; btn.disabled=false;
+    toast('✅ Message sent! We\'ll reply within 24 hours.');
+  },1000);
+}
+
+/* ════════════════════════════════════════
+   AI CHAT
+════════════════════════════════════════ */
+async function aiSend(){
+  const inp=document.getElementById('ai-in');
+  const chat=document.getElementById('ai-chat');
+  const msg=(inp.value||'').trim(); if(!msg) return;
+  const uD=document.createElement('div'); uD.className='aimsg usr'; uD.textContent=msg;
+  chat.appendChild(uD); inp.value=''; chat.scrollTop=chat.scrollHeight;
+  const tD=document.createElement('div'); tD.className='aimsg bot';
+  tD.innerHTML='<div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
+  chat.appendChild(tD); chat.scrollTop=chat.scrollHeight;
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:1000,
+        system:'You are BashaLagbe AI, a friendly expert real estate assistant for Bangladesh. Help with properties in Dhaka (Gulshan, Banani, Dhanmondi, Uttara, Baridhara, Mirpur, Bashundhara), Chittagong, Sylhet, Cox\'s Bazar etc. EMI rates: BRAC 9%, Dutch-Bangla 8.5%, EBL 9.5%. Use ৳ for prices. Area prices (per sqft): Gulshan ৳12K-25K, Banani ৳8K-18K, Dhanmondi ৳6K-12K, Uttara ৳4K-8K. Be concise (3-5 sentences), warm, and specific to Bangladesh. Give practical, actionable advice.',
+        messages:[{role:'user',content:msg}]
+      })
+    });
+    const data=await res.json();
+    tD.textContent=data.content?.[0]?.text||'Sorry, I could not process that. Please try again.';
+  } catch {
+    const fb={
+      'gulshan':'🏢 Gulshan 3BHK: ৳80L–৳2Cr+, averaging ৳12K–৳25K/sqft. Gulshan-2 is 15-20% more premium than Gulshan-1. Best streets: Gulshan Ave, Road 11, Road 83.',
+      'banani':'🏙️ Banani 3BHK: ৳60L–৳1.5Cr. Great for young professionals and expats. DOHS Banani is most premium. Strong corporate rental demand.',
+      'emi':'🏦 For ৳80L at 9% p.a. over 20 years → Monthly EMI ≈ ৳72,000. At BRAC\'s 9%: ৳72K/mo. At Dutch-Bangla\'s 8.5%: ৳69.8K/mo. Max loan is typically 70-80% of property value.',
+      'investment':'📈 Best 2025 investments: (1) Bashundhara R/A — 15-20% appreciation (2) Purbachal New City — long-term play (3) Gulshan — stable premium (4) Cox\'s Bazar — 14-18% rental yield.',
+      'document':'📋 To buy property in Bangladesh you need: NID, TIN, 6-month bank statement, salary certificate. From seller: title deed (CS/SA/RS records), mutation certificate, tax clearance. Budget 10-12% extra for registration costs.',
+      'coxsbazar':'🌊 Cox\'s Bazar delivers 14-18% vacation rental yield. 2BHK sea-view: ৳40L–৳80L. Marine Drive penthouses: ৳80L–৳2Cr+. High tourist demand ensures occupancy. Sugandha Beach area is most sought-after.',
+      'sylhet':'🌿 Sylhet is driven by NRB investment. Prices are 20-30% lower than Dhaka but appreciating. City apartments: ৳40L–৳1.2Cr. Tea garden villas: ৳1.5Cr–৳4Cr. Great for holiday home or NRB investment.',
+      'default':'🏠 I can help with property search, EMI calculations, legal process, and Bangladesh real estate market insights. To enable full AI responses, add your Anthropic API key to the code. What would you like to know?'
+    };
+    const key=Object.keys(fb).find(k=>msg.toLowerCase().includes(k))||'default';
+    tD.textContent=fb[key];
+  }
+  chat.scrollTop=chat.scrollHeight;
+}
+function aiQ(q){ document.getElementById('ai-in').value=q; aiSend(); }
+
+/* ════════════════════════════════════════
+   FAQ
+════════════════════════════════════════ */
+const FAQS_DATA=[
+  {cat:'Buying Property',items:[
+    {q:'How do I start buying a property through BashaLagbe?',a:'Browse listings using our filters, save your favourites, then contact the agent via the "Call Agent", "WhatsApp", or "Send Inquiry" buttons on each property page. Our agents respond within 24 hours.'},
+    {q:'What documents do I need to buy property in Bangladesh?',a:'You need: NID card, TIN certificate, bank statements (last 6 months), salary certificate or income proof. The seller must provide: registered title deed, CS/SA/RS records, mutation certificate (khatian), land tax clearance, and encumbrance certificate.'},
+    {q:'How much are registration and transfer costs?',a:'Total costs are typically 10-12% of the deed value: stamp duty (1.5-3%), registration fee (1%), gain tax (4%), VAT (1.5%), local government tax (2%), and legal/agent fees (1-2%). Always budget for this on top of the property price.'},
+    {q:'Are all listings on BashaLagbe verified?',a:'Listings with the "✓ Verified" badge have been physically inspected and documents reviewed by our team. We recommend prioritising verified listings. Always independently verify documents before completing any transaction.'},
+  ]},
+  {cat:'Renting',items:[
+    {q:'How do I rent a property through BashaLagbe?',a:'Browse rental listings, filter by budget and location, then contact the agent. Schedule a visit directly from the property page. Once you agree on terms, the agent will prepare a rental agreement (lease deed).'},
+    {q:'How much advance payment is typically required in Dhaka?',a:'Most landlords in Dhaka require 2-3 months advance rent plus 1-2 months security deposit. Premium properties may ask for up to 6 months advance. This is always negotiable, especially for longer leases.'},
+    {q:'Can I negotiate the rent?',a:'Yes! In most cases rent is negotiable, especially if you\'re signing a 1-2 year lease. Our agents are trained to negotiate on your behalf. Don\'t hesitate to make a counteroffer — it\'s expected.'},
+  ]},
+  {cat:'Listing a Property',items:[
+    {q:'How do I list my property on BashaLagbe?',a:'Sign up for a free account, click "List Property" from your dashboard, fill in all details, add photos (via image URL), select amenities, and submit. Your listing goes live immediately.'},
+    {q:'Is it free to list a property?',a:'Yes! Creating an account and listing a property is completely free for the first listing. Premium listing packages with featured placement and priority support are also available.'},
+  ]},
+  {cat:'Platform & Account',items:[
+    {q:'Is BashaLagbe free to use for buyers and renters?',a:'Yes, completely free. Searching, saving favourites, contacting agents, and scheduling visits are all free. We charge agents a small fee for premium placement, which lets us keep the platform free for users.'},
+    {q:'Is my personal data safe?',a:'Yes. Your data is stored locally in your browser (localStorage). We use secure best practices and never sell your personal data to third parties. You can delete your account data at any time by clearing browser storage.'},
+  ]},
+];
+
+function renderFAQ(){
+  const c=document.getElementById('faq-cont'); if(!c) return;
+  // Remove existing FAQ items but keep the bottom card
+  const bottomCard=c.querySelector('[style*="gpale"]');
+  c.innerHTML='';
+  FAQS_DATA.forEach(sec=>{
+    const secDiv=document.createElement('div');
+    secDiv.innerHTML=`<div class="slbl" style="margin-bottom:14px">${sec.cat}</div>`;
+    sec.items.forEach(f=>{
+      const item=document.createElement('div'); item.className='faqitem';
+      item.innerHTML=`<div class="faqq" onclick="toggleFAQ(this)">${f.q}<span class="faqicon">+</span></div><div class="faqa">${f.a}</div>`;
+      secDiv.appendChild(item);
+    });
+    c.appendChild(secDiv);
+    c.appendChild(document.createElement('br'));
+  });
+  if(bottomCard) c.appendChild(bottomCard);
+  else {
+    const bc=document.createElement('div');
+    bc.style.cssText='text-align:center;padding:40px;background:var(--gpale);border-radius:var(--rxl);margin-top:40px;border:1px solid rgba(26,138,90,.15)';
+    bc.innerHTML=`<div style="font-size:36px;margin-bottom:12px">🤖</div><h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:8px">Still have questions?</h3><p style="font-size:14px;color:var(--g600);margin-bottom:20px">Ask our AI assistant or contact our support team</p><div class="gap10" style="justify-content:center"><button class="btn bp" onclick="go('home')">Ask AI Assistant</button><button class="btn bo" onclick="go('contact')">Contact Support</button></div>`;
+    c.appendChild(bc);
+  }
+}
+
+function toggleFAQ(el){
+  const a=el.nextElementSibling;
+  const isOpen=a.classList.contains('show');
+  document.querySelectorAll('.faqq').forEach(q=>{q.classList.remove('open');q.nextElementSibling.classList.remove('show');});
+  if(!isOpen){el.classList.add('open');a.classList.add('show');}
+}
+
+/* ════════════════════════════════════════
+   CAREERS
+════════════════════════════════════════ */
+const JOBS_DATA=[
+  {title:'Senior React Developer',dept:'Engineering',loc:'Dhaka (Hybrid)',type:'Full-time',sal:'৳1.5L–৳2.5L/mo'},
+  {title:'Product Manager',dept:'Product',loc:'Dhaka (Remote OK)',type:'Full-time',sal:'৳1.2L–৳2L/mo'},
+  {title:'Real Estate Operations Manager',dept:'Operations',loc:'Dhaka (On-site)',type:'Full-time',sal:'৳80K–৳1.2L/mo'},
+  {title:'Digital Marketing Specialist',dept:'Marketing',loc:'Dhaka (Hybrid)',type:'Full-time',sal:'৳60K–৳90K/mo'},
+  {title:'Backend Engineer (Node.js)',dept:'Engineering',loc:'Remote',type:'Full-time',sal:'৳1.2L–৳2L/mo'},
+  {title:'UI/UX Designer',dept:'Design',loc:'Remote',type:'Full-time',sal:'৳80K–৳1.2L/mo'},
+  {title:'Field Property Verifier',dept:'Operations',loc:'Dhaka / Chittagong',type:'Part-time',sal:'৳25K–৳40K/mo'},
+  {title:'Customer Success Executive',dept:'Support',loc:'Dhaka',type:'Full-time',sal:'৳35K–৳55K/mo'},
+];
+
+function renderJobs(){
+  const c=document.getElementById('jobs-list'); if(!c||c.children.length) return;
+  JOBS_DATA.forEach(j=>{
+    const d=document.createElement('div'); d.className='jcard';
+    d.innerHTML=`<div><div class="jtitle">${j.title}</div><div class="jmeta"><span class="jtag">🏢 ${j.dept}</span><span class="jtag">📍 ${j.loc}</span><span class="jtag">⏰ ${j.type}</span><span class="jtag" style="color:var(--green);background:var(--gpale)">💰 ${j.sal}</span></div></div><button class="btn bp bsm" onclick="openJobModal('${j.title}')">Apply Now</button>`;
+    c.appendChild(d);
+  });
+}
+
+function openJobModal(title){
+  showModal(`
+    <button class="mcl" onclick="closeModal()">✕</button>
+    <h2>Apply for Position</h2>
+    <div class="msub">${title}</div>
+    <div id="job-err" class="err-msg" style="display:none;margin-bottom:10px"></div>
+    <div class="igp"><label>Full Name *</label><input id="j-name" value="${currentUser?.name||''}" placeholder="Rahim Ahmed"></div>
+    <div class="igp"><label>Email Address *</label><input id="j-email" type="email" value="${currentUser?.email||''}" placeholder="you@email.com"></div>
+    <div class="igp"><label>Phone Number</label><input id="j-phone" value="${currentUser?.phone||''}" placeholder="+880 1700-000000"></div>
+    <div class="igp"><label>Why are you a great fit?</label><textarea id="j-letter" style="border:1.5px solid var(--g200);border-radius:var(--rsm);padding:10px 14px;width:100%;min-height:100px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:vertical" placeholder="Tell us about your relevant experience and why you want to join BashaLagbe..."></textarea></div>
+    <div class="gap10">
+      <button class="btn bp" onclick="submitJob('${title}')">Submit Application</button>
+      <button class="btn bo" onclick="closeModal()">Cancel</button>
+    </div>`);
+}
+
+function submitJob(title){
+  const name=v('j-name').trim(), email=v('j-email').trim();
+  if(!name||!email){ showErr('job-err','Name and email are required'); return; }
+  contacts.push({id:'job'+Date.now(),name,email,phone:v('j-phone'),subject:'Job Application: '+title,message:v('j-letter'),date:new Date().toLocaleDateString()});
+  saveContacts(); closeModal();
+  toast('✅ Application submitted! Our HR team will contact you within 5 business days.');
+}
+
+/* ════════════════════════════════════════
+   PRIVACY & TERMS
+════════════════════════════════════════ */
+function pSec(t,b){ return `<div style="margin-bottom:28px"><h3 style="font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);margin-bottom:10px">${t}</h3><p style="font-size:15px;color:var(--g600);line-height:1.85">${b}</p></div>`; }
+
+function renderPrivacy(){
+  const c=document.getElementById('priv-cont'); if(!c||c.innerHTML.trim()) return;
+  c.innerHTML=
+    pSec('1. Information We Collect','We collect: information you provide directly (name, email, phone, NID for verification, property details, messages); usage data generated by your platform activity (search history, viewed listings, saved properties, device type, IP address); and information from connected services if you sign in via Google.') +
+    pSec('2. How We Use Your Information','We use your data to: operate and improve BashaLagbe; connect you with property agents; send relevant property recommendations and updates; prevent fraud and ensure platform security; comply with Bangladeshi legal obligations (BTRC, RJSC); and send marketing communications with your consent.') +
+    pSec('3. Information Sharing','We do not sell your personal data. We share information with: verified agents when you make an inquiry or schedule a visit; service providers who help us operate the platform (Firebase, Google Cloud, Cloudinary); and law enforcement when required by Bangladeshi law.') +
+    pSec('4. Data Security','We implement industry-standard security measures including SSL/TLS encryption for all data in transit, secure password hashing, JWT-based authentication, and regular security audits. However, no system is 100% secure — please use a strong, unique password.') +
+    pSec('5. Your Rights','Under Bangladesh\'s data protection framework, you have the right to: access your personal data; correct inaccurate information; request deletion of your account; opt out of marketing communications; and lodge a complaint with relevant authorities. Contact: privacy@bashalagbe.com') +
+    pSec('6. Cookies & Local Storage','We use browser localStorage to store your session, saved properties, and preferences. You can clear this at any time through your browser settings. This may affect some platform features.') +
+    pSec('7. Contact Us','For all privacy-related queries, contact: privacy@bashalagbe.com · BashaLagbe Ltd, House 12, Road 11, Gulshan-2, Dhaka-1212, Bangladesh.');
+}
+
+function renderTerms(){
+  const c=document.getElementById('terms-cont'); if(!c||c.innerHTML.trim()) return;
+  c.innerHTML=
+    pSec('1. Acceptance of Terms','By accessing or using BashaLagbe, you confirm that you are at least 18 years old and agree to be bound by these Terms and Conditions. If you do not agree, please do not use the platform.') +
+    pSec('2. Platform Description','BashaLagbe is an online real estate marketplace connecting property buyers, sellers, renters, and agents in Bangladesh. We provide property search tools, listing management, agent communication features, AI-powered property analysis, and EMI calculators.') +
+    pSec('3. User Responsibilities','You must: provide accurate and truthful information in all listings and communications; not post false, misleading, or duplicate listings; not harass, threaten, or deceive other users or agents; comply with all applicable Bangladeshi laws; and keep your account credentials secure.') +
+    pSec('4. Listing Rules','All property listings must be genuine, accurately priced, and legally owned or authorized by you. BashaLagbe reserves the right to remove any listing without notice if it violates our community guidelines. We conduct random verification checks on all listings.') +
+    pSec('5. Platform Fees','Searching, saving properties, and contacting agents is completely free for buyers and renters. Property owners and agents may list one property free; premium listing packages are available for enhanced visibility.') +
+    pSec('6. Disclaimer','BashaLagbe is a marketplace — we do not own any listed properties and are not a party to any real estate transaction. We are not responsible for the accuracy of agent-provided information. Always independently verify all property documents and consult a licensed lawyer before completing any property transaction.') +
+    pSec('7. Limitation of Liability','BashaLagbe\'s total liability for any claim shall not exceed BDT 10,000 or the amount paid by you to BashaLagbe in the last 12 months, whichever is lower. We are not liable for indirect, incidental, or consequential damages.') +
+    pSec('8. Governing Law','These Terms are governed by the laws of Bangladesh. Any disputes arising from these Terms or your use of BashaLagbe shall be subject to the exclusive jurisdiction of the courts of Dhaka, Bangladesh.');
+}
+
+/* ════════════════════════════════════════
+   MODAL
+════════════════════════════════════════ */
+function showModal(html){
+  closeModal();
+  const bg=document.createElement('div'); bg.className='mbg'; bg.id='modal-bg';
+  bg.onclick=e=>{if(e.target===bg) closeModal();};
+  const m=document.createElement('div'); m.className='modal'; m.innerHTML=html;
+  bg.appendChild(m); document.body.appendChild(bg);
+  // Close on Escape
+  document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ closeModal(); document.removeEventListener('keydown',esc); } });
+}
+function closeModal(){ document.getElementById('modal-bg')?.remove(); }
+
+/* ════════════════════════════════════════
+   UTILITIES
+════════════════════════════════════════ */
+function v(id){ return (document.getElementById(id)?.value||'').trim(); }
+function showErr(id,msg){ const el=document.getElementById(id); if(el){el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',5000);} }
+
+function toast(msg, type='ok'){
+  document.querySelector('.toast')?.remove();
+  const t=document.createElement('div'); t.className='toast'+(type==='err'?' err':'');
+  t.textContent=msg; document.body.appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity .5s'; t.style.opacity='0'; setTimeout(()=>t.remove(),500); },3500);
+}
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+updateNav();
+renderFeat();
+renderLux();
+setTimeout(animCnt, 300);
+</script>
+</body>
+</html>
